@@ -1,0 +1,23 @@
+id: wp_redirects
+label: WordPress Legacy Redirects CSV to Drupal Redirects
+source:
+  plugin: csv
+  path: modules/custom/wp_drupal_prototype_migrate/data/sample-redirects.csv
+  header_row_count: 1
+  ids: [legacy_url]
+process:
+  redirect_source/path:
+    plugin: legacy_url_to_path
+    source: legacy_url
+  redirect_redirect/uri:
+    plugin: target_url_to_uri
+    source: redirect_to
+  status_code: status_code
+  language:
+    plugin: default_value
+    default_value: en
+destination:
+  plugin: entity:redirect
+migration_dependencies:
+  required: []
+  optional: []

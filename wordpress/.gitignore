@@ -1,0 +1,6 @@
+# Keep local WordPress runtime files out of git while tracking DDEV config.
+*
+!.ddev/
+!.ddev/config.yaml
+!.gitignore
+!README.md

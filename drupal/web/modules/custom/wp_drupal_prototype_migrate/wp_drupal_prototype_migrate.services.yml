@@ -1,0 +1,3 @@
+services:
+  wp_drupal_prototype_migrate.legacy_url_helper:
+    class: Drupal\wp_drupal_prototype_migrate\Service\LegacyUrlHelper

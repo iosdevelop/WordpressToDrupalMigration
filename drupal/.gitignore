@@ -1,0 +1,17 @@
+# Keep local Drupal runtime files out of git while tracking module and DDEV config.
+*
+!.ddev/
+!.ddev/config.yaml
+!.gitignore
+!README.md
+!composer.json
+!web/
+
+# Allow custom module source to remain tracked.
+web/*
+!web/modules/
+web/modules/*
+!web/modules/custom/
+web/modules/custom/*
+!web/modules/custom/wp_drupal_prototype_migrate/
+!web/modules/custom/wp_drupal_prototype_migrate/**

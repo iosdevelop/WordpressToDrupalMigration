@@ -1,0 +1,11 @@
+legacy_url,redirect_to,status_code
+https://legacy.example.com/about/about-company-overview/,/about,301
+https://legacy.example.com/about/about-leadership/,/about,301
+https://legacy.example.com/services/service-strategy-workshop/,/services,301
+https://legacy.example.com/services/service-content-audit/,/services,301
+https://legacy.example.com/industries/industry-healthcare/,/industries,301
+https://legacy.example.com/industries/industry-higher-ed/,/industries,301
+https://legacy.example.com/resources/resource-guide-redirect-strategy/,/resources,301
+https://legacy.example.com/resources/resource-faq-migration/,/resources,301
+https://legacy.example.com/legal/legal-privacy-policy/,/legal,301
+https://legacy.example.com/contact/contact-sales/,/contact,301

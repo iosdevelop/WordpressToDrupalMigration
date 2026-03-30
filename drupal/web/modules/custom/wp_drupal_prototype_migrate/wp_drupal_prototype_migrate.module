@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function wp_drupal_prototype_migrate_help(string $route_name, RouteMatchInterface $route_match): ?string {
+  if ($route_name === 'help.page.wp_drupal_prototype_migrate') {
+    return '<p>Provides prototype migrations and helpers for WordPress page import and redirect mapping.</p>';
+  }
+
+  return NULL;
+}

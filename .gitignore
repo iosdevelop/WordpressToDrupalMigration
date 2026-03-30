@@ -1,0 +1,26 @@
+# WordPress downloaded core (keeps repo clean after local bootstrap).
+/wordpress/index.php
+/wordpress/license.txt
+/wordpress/readme.html
+/wordpress/xmlrpc.php
+/wordpress/wp-*.php
+/wordpress/wp-admin/
+/wordpress/wp-includes/
+/wordpress/wp-content/plugins/
+/wordpress/wp-content/themes/
+/wordpress/wp-content/uploads/
+
+# Drupal downloaded dependencies and generated artifacts.
+/drupal/vendor/
+/drupal/composer.lock
+/drupal/web/autoload.php
+/drupal/web/core/
+/drupal/web/modules/contrib/
+/drupal/web/profiles/contrib/
+/drupal/web/themes/contrib/
+/drupal/web/sites/default/files/
+/drupal/web/sites/*/settings.local.php
+
+# Local DDEV snapshots and build internals.
+**/.ddev/.db_snapshots/
+**/.ddev/.webimageBuild/

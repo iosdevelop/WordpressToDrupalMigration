@@ -1,0 +1,78 @@
+<?php
+
+declare(strict_types=1);
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\node\Entity\NodeType;
+
+/**
+ * Implements hook_install().
+ */
+function wp_drupal_prototype_migrate_install(): void {
+  if (!NodeType::load('wp_migrated_page')) {
+    $content_type = NodeType::create([
+      'type' => 'wp_migrated_page',
+      'name' => 'WP Migrated Page',
+      'description' => 'Prototype destination type for imported WordPress pages.',
+    ]);
+    $content_type->save();
+  }
+
+  _wp_drupal_prototype_migrate_ensure_field_storage('field_legacy_url', 'string', [
+    'max_length' => 512,
+  ]);
+  _wp_drupal_prototype_migrate_ensure_field_storage('field_seo_title', 'string', [
+    'max_length' => 255,
+  ]);
+  _wp_drupal_prototype_migrate_ensure_field_storage('field_seo_description', 'string_long');
+
+  _wp_drupal_prototype_migrate_ensure_field_instance('field_legacy_url', 'Legacy URL');
+  _wp_drupal_prototype_migrate_ensure_field_instance('field_seo_title', 'SEO Title');
+  _wp_drupal_prototype_migrate_ensure_field_instance('field_seo_description', 'SEO Description');
+
+  $display_repository = \Drupal::service('entity_display.repository');
+
+  $form_display = $display_repository->getFormDisplay('node', 'wp_migrated_page', 'default');
+  $form_display->setComponent('field_legacy_url', ['type' => 'string_textfield']);
+  $form_display->setComponent('field_seo_title', ['type' => 'string_textfield']);
+  $form_display->setComponent('field_seo_description', ['type' => 'string_textarea']);
+  $form_display->save();
+
+  $view_display = $display_repository->getViewDisplay('node', 'wp_migrated_page', 'default');
+  $view_display->setComponent('field_legacy_url', ['type' => 'string']);
+  $view_display->setComponent('field_seo_title', ['type' => 'string']);
+  $view_display->setComponent('field_seo_description', ['type' => 'basic_string']);
+  $view_display->save();
+}
+
+/**
+ * Creates field storage when missing.
+ */
+function _wp_drupal_prototype_migrate_ensure_field_storage(string $field_name, string $field_type, array $settings = []): void {
+  if (!FieldStorageConfig::loadByName('node', $field_name)) {
+    FieldStorageConfig::create([
+      'field_name' => $field_name,
+      'entity_type' => 'node',
+      'type' => $field_type,
+      'settings' => $settings,
+      'cardinality' => 1,
+      'translatable' => FALSE,
+    ])->save();
+  }
+}
+
+/**
+ * Creates bundle field when missing.
+ */
+function _wp_drupal_prototype_migrate_ensure_field_instance(string $field_name, string $label): void {
+  if (!FieldConfig::loadByName('node', 'wp_migrated_page', $field_name)) {
+    FieldConfig::create([
+      'field_name' => $field_name,
+      'entity_type' => 'node',
+      'bundle' => 'wp_migrated_page',
+      'label' => $label,
+      'required' => FALSE,
+    ])->save();
+  }
+}

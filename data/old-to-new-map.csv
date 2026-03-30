@@ -1,0 +1,11 @@
+old_url,title,slug,seo_title,seo_description,suggested_target_url,map_notes
+https://legacy.example.com/about/about-company-overview/,Company Overview,about-company-overview,Company Overview | Legacy Prototype,Prototype SEO description for Company Overview.,/about,Prototype consolidation rule by section
+https://legacy.example.com/about/about-leadership/,Leadership,about-leadership,Leadership | Legacy Prototype,Prototype SEO description for Leadership.,/about,Prototype consolidation rule by section
+https://legacy.example.com/services/service-strategy-workshop/,Strategy Workshop,service-strategy-workshop,Strategy Workshop | Legacy Prototype,Prototype SEO description for Strategy Workshop.,/services,Prototype consolidation rule by section
+https://legacy.example.com/services/service-content-audit/,Content Audit,service-content-audit,Content Audit | Legacy Prototype,Prototype SEO description for Content Audit.,/services,Prototype consolidation rule by section
+https://legacy.example.com/industries/industry-healthcare/,Healthcare,industry-healthcare,Healthcare | Legacy Prototype,Prototype SEO description for Healthcare.,/industries,Prototype consolidation rule by section
+https://legacy.example.com/industries/industry-higher-ed/,Higher Education,industry-higher-ed,Higher Education | Legacy Prototype,Prototype SEO description for Higher Education.,/industries,Prototype consolidation rule by section
+https://legacy.example.com/resources/resource-guide-redirect-strategy/,Guide Redirect Strategy,resource-guide-redirect-strategy,Guide Redirect Strategy | Legacy Prototype,Prototype SEO description for Guide Redirect Strategy.,/resources,Prototype consolidation rule by section
+https://legacy.example.com/resources/resource-faq-migration/,FAQ Migration,resource-faq-migration,FAQ Migration | Legacy Prototype,,/resources,Prototype consolidation rule by section
+https://legacy.example.com/legal/legal-privacy-policy/,Privacy Policy,legal-privacy-policy,Privacy Policy | Legacy Prototype,Prototype SEO description for Privacy Policy.,/legal,Prototype consolidation rule by section
+https://legacy.example.com/contact/contact-sales/,Contact Sales,contact-sales,Contact Sales | Legacy Prototype,Prototype SEO description for Contact Sales.,/contact,Prototype consolidation rule by section
