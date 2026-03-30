@@ -1,0 +1,96 @@
+{#
+/**
+ * @file
+ * Custom page template for the Prototype Showcase theme.
+ */
+#}
+<div class="ps-bg-orb ps-bg-orb-one"></div>
+<div class="ps-bg-orb ps-bg-orb-two"></div>
+
+<div class="ps-shell">
+  <header class="ps-header">
+    <div class="ps-header-inner">
+      <a class="ps-brand" href="{{ path('<front>') }}">
+        <span class="ps-brand-chip">PS</span>
+        <span class="ps-brand-name">{{ site_name ?: 'Prototype Showcase' }}</span>
+      </a>
+
+      <nav class="ps-nav" aria-label="Primary menu">
+        {% if page.primary_menu %}
+          {{ page.primary_menu }}
+        {% else %}
+          <ul class="ps-nav-list">
+            {% for item in prototype_showcase_nav_links %}
+              <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </nav>
+    </div>
+  </header>
+
+  <main class="ps-main">
+    {% if is_front %}
+      <section class="ps-hero">
+        <div class="ps-hero-copy">
+          <p class="ps-eyebrow">Drupal Migration Prototype</p>
+          <h1>Confident Demo Design for Stakeholder Reviews</h1>
+          <p>
+            This theme is optimized for show-focus storytelling: clear structure,
+            strong visuals, and a modern layout that elevates migration outcomes.
+          </p>
+        </div>
+        <div class="ps-stat-grid">
+          <article class="ps-stat-card">
+            <strong>CSV-Driven</strong>
+            <span>Input Pipeline</span>
+          </article>
+          <article class="ps-stat-card">
+            <strong>Redirects</strong>
+            <span>Continuity Built-In</span>
+          </article>
+          <article class="ps-stat-card">
+            <strong>275 &#8594; 125</strong>
+            <span>Scale Narrative</span>
+          </article>
+          <article class="ps-stat-card">
+            <strong>Migrate API</strong>
+            <span>Drupal Native</span>
+          </article>
+        </div>
+      </section>
+    {% endif %}
+
+    {% if page.highlighted %}
+      <section class="ps-panel ps-fade ps-delay-1">
+        {{ page.highlighted }}
+      </section>
+    {% endif %}
+
+    {% if page.help %}
+      <section class="ps-panel ps-fade ps-delay-1">
+        {{ page.help }}
+      </section>
+    {% endif %}
+
+    <div class="ps-layout">
+      <section class="ps-panel ps-fade ps-delay-2">
+        {% if page.content %}
+          {{ page.content }}
+        {% endif %}
+      </section>
+
+      {% if page.sidebar_first %}
+        <aside class="ps-panel ps-fade ps-delay-3">
+          {{ page.sidebar_first }}
+        </aside>
+      {% endif %}
+    </div>
+  </main>
+
+  {% if page.footer %}
+    <footer class="ps-footer ps-fade ps-delay-3">
+      {{ page.footer }}
+    </footer>
+  {% endif %}
+</div>

@@ -15,3 +15,11 @@ web/modules/*
 web/modules/custom/*
 !web/modules/custom/wp_drupal_prototype_migrate/
 !web/modules/custom/wp_drupal_prototype_migrate/**
+
+# Allow custom theme source to remain tracked.
+!web/themes/
+web/themes/*
+!web/themes/custom/
+web/themes/custom/*
+!web/themes/custom/prototype_showcase/
+!web/themes/custom/prototype_showcase/**

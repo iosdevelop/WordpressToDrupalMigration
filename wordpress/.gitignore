@@ -4,3 +4,11 @@
 !.ddev/config.yaml
 !.gitignore
 !README.md
+
+# Allow custom demo theme source to be tracked.
+!wp-content/
+wp-content/*
+!wp-content/themes/
+wp-content/themes/*
+!wp-content/themes/show-focus-prototype/
+!wp-content/themes/show-focus-prototype/**

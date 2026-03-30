@@ -1,0 +1,16 @@
+name: Prototype Showcase
+type: theme
+description: Bold demo-first Drupal theme for migration prototype walkthroughs.
+core_version_requirement: ^10 || ^11
+base theme: stable9
+libraries:
+  - prototype_showcase/global
+regions:
+  header: Header
+  primary_menu: Primary menu
+  secondary_menu: Secondary menu
+  highlighted: Highlighted
+  help: Help
+  content: Content
+  sidebar_first: Sidebar
+  footer: Footer

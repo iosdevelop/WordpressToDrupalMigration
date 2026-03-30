@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * @file
+ * Theme helpers for Prototype Showcase.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Url;
+
+/**
+ * Implements hook_preprocess_page().
+ */
+function prototype_showcase_preprocess_page(array &$variables): void {
+  $variables['prototype_showcase_nav_links'] = [
+    [
+      'title' => t('Home'),
+      'url' => Url::fromRoute('<front>')->toString(),
+    ],
+    [
+      'title' => t('About'),
+      'url' => '/prototype/about-company-overview',
+    ],
+    [
+      'title' => t('Services'),
+      'url' => '/prototype/service-strategy-workshop',
+    ],
+    [
+      'title' => t('Resources'),
+      'url' => '/prototype/resource-guide-redirect-strategy',
+    ],
+    [
+      'title' => t('Contact'),
+      'url' => '/prototype/contact-sales',
+    ],
+  ];
+}
+
