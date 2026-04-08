@@ -12,6 +12,25 @@ use Drupal\taxonomy\Entity\Vocabulary;
  * Implements hook_install().
  */
 function wp_drupal_prototype_migrate_install(): void {
+  _wp_prototype_setup_content_model();
+}
+
+/**
+ * Add wp_landing_page and wp_resource content types, taxonomy vocabularies,
+ * and all shared fields. Safe to run on an already-installed site.
+ */
+function wp_drupal_prototype_migrate_update_9001(): void {
+  _wp_prototype_setup_content_model();
+}
+
+/**
+ * Idempotent setup of all content types, vocabularies, field storages,
+ * field instances, and display configurations for this module.
+ *
+ * All helpers check for existence before creating, so this can be called
+ * from both hook_install() and hook_update_N() safely.
+ */
+function _wp_prototype_setup_content_model(): void {
   // Taxonomy vocabularies (must exist before field instances that reference them).
   _wp_prototype_ensure_vocabulary('wp_section', 'WP Section');
   _wp_prototype_ensure_vocabulary('wp_tags', 'WP Tags');

@@ -25,15 +25,19 @@ process:
     plugin: default_value
     default_value: 1
   uid:
-    plugin: migration_lookup
-    migration: wp_users
-    source: wp_author_login
-    no_stub: true
+    - plugin: migration_lookup
+      migration: wp_users
+      source: wp_author_login
+      no_stub: true
+    - plugin: skip_on_empty
+      method: process
   field_wp_section:
-    plugin: migration_lookup
-    migration: wp_taxonomy_terms
-    source: wp_category_slug
-    no_stub: true
+    - plugin: migration_lookup
+      migration: wp_taxonomy_terms
+      source: wp_category_slug
+      no_stub: true
+    - plugin: skip_on_empty
+      method: process
 destination:
   plugin: entity:node
   default_bundle: wp_migrated_page
