@@ -1,0 +1,24 @@
+id: wp_media
+label: WordPress Attachments to Drupal Files
+source:
+  plugin: csv
+  path: modules/custom/wp_drupal_prototype_migrate/data/wp-media.csv
+  header_row_count: 1
+  ids: [ID]
+process:
+  uri:
+    plugin: download
+    source:
+      - file_url
+      - dest_uri
+    overwrite: false
+  filename: file_name
+  filemime: post_mime_type
+  status:
+    plugin: default_value
+    default_value: 1
+destination:
+  plugin: entity:file
+migration_dependencies:
+  required: []
+  optional: []

@@ -6,9 +6,7 @@ source:
   header_row_count: 1
   ids: [slug]
 process:
-  type:
-    plugin: default_value
-    default_value: wp_migrated_page
+  type: content_type
   title: title
   body/value: content_html
   body/format:
@@ -26,9 +24,22 @@ process:
   status:
     plugin: default_value
     default_value: 1
+  uid:
+    plugin: migration_lookup
+    migration: wp_users
+    source: wp_author_login
+    no_stub: true
+  field_wp_section:
+    plugin: migration_lookup
+    migration: wp_taxonomy_terms
+    source: wp_category_slug
+    no_stub: true
 destination:
   plugin: entity:node
   default_bundle: wp_migrated_page
 migration_dependencies:
-  required: []
-  optional: []
+  required:
+    - wp_taxonomy_terms
+    - wp_users
+  optional:
+    - wp_media

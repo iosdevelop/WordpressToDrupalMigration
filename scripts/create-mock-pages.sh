@@ -263,6 +263,68 @@ get_page_id_by_slug() {
   wp_cli post list --post_type=page --name="$slug" --posts_per_page=1 --field=ID --format=ids
 }
 
+# ---------------------------------------------------------------------------
+# Users
+# ---------------------------------------------------------------------------
+create_mock_user() {
+  local login="$1" email="$2" display_name="$3" role="$4"
+  if ! wp_cli user get "$login" --field=ID >/dev/null 2>&1; then
+    wp_cli user create "$login" "$email" \
+      --display_name="$display_name" \
+      --role="$role" \
+      --user_pass=prototype123 >/dev/null
+    echo "Created user: $login ($role)"
+  else
+    echo "User exists: $login (skipping)"
+  fi
+}
+
+create_mock_user "content.editor"    "content.editor@example.com"    "Content Editor"    "editor"
+create_mock_user "site.admin"        "site.admin@example.com"        "Site Admin"        "administrator"
+create_mock_user "migration.author"  "migration.author@example.com"  "Migration Author"  "author"
+
+# ---------------------------------------------------------------------------
+# Section categories (one per major section)
+# ---------------------------------------------------------------------------
+create_section_category() {
+  local name="$1" slug="$2"
+  if ! wp_cli term get category "$slug" --by=slug --field=term_id >/dev/null 2>&1; then
+    wp_cli term create category "$name" --slug="$slug" >/dev/null
+    echo "Created category: $name"
+  else
+    echo "Category exists: $name (skipping)"
+  fi
+}
+
+create_section_category "About"       "about"
+create_section_category "Services"    "services"
+create_section_category "Industries"  "industries"
+create_section_category "Resources"   "resources"
+create_section_category "Legal"       "legal"
+create_section_category "Contact"     "contact"
+create_section_category "Locations"   "locations"
+
+# ---------------------------------------------------------------------------
+# Tags
+# ---------------------------------------------------------------------------
+create_tag() {
+  local name="$1" slug="$2"
+  if ! wp_cli term get post_tag "$slug" --by=slug --field=term_id >/dev/null 2>&1; then
+    wp_cli term create post_tag "$name" --slug="$slug" >/dev/null
+    echo "Created tag: $name"
+  else
+    echo "Tag exists: $name (skipping)"
+  fi
+}
+
+create_tag "CMS Migration"      "cms-migration"
+create_tag "Enterprise"         "enterprise"
+create_tag "Drupal"             "drupal"
+create_tag "WordPress"          "wordpress"
+create_tag "Content Strategy"   "content-strategy"
+create_tag "Governance"         "governance"
+create_tag "SEO"                "seo"
+
 PAGE_DEFINITIONS=$(cat <<'DATA'
 company|Company|about||1
 about-company-overview|Company Overview|about||1
@@ -370,6 +432,24 @@ while IFS='|' read -r slug title section parent_slug has_description; do
   else
     wp_cli post meta delete "$page_id" seo_description >/dev/null 2>&1 || true
   fi
+
+  # Assign section category.
+  wp_cli post term set "$page_id" category "$section" >/dev/null 2>&1 || true
+
+  # Assign section-relevant tags.
+  case "$section" in
+    about)      section_tags="cms-migration enterprise" ;;
+    services)   section_tags="cms-migration drupal content-strategy" ;;
+    industries) section_tags="enterprise governance" ;;
+    resources)  section_tags="cms-migration content-strategy seo" ;;
+    legal)      section_tags="governance" ;;
+    contact)    section_tags="" ;;
+    locations)  section_tags="" ;;
+    *)          section_tags="cms-migration" ;;
+  esac
+  for tag in $section_tags; do
+    wp_cli post term add "$page_id" post_tag "$tag" >/dev/null 2>&1 || true
+  done
 
 done <<<"$PAGE_DEFINITIONS"
 

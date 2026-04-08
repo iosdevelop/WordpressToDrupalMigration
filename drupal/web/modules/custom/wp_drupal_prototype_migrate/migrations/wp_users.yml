@@ -1,0 +1,19 @@
+id: wp_users
+label: WordPress Users to Drupal Users
+source:
+  plugin: csv
+  path: modules/custom/wp_drupal_prototype_migrate/data/wp-users.csv
+  header_row_count: 1
+  ids: [user_login]
+process:
+  name: user_login
+  mail: user_email
+  status:
+    plugin: default_value
+    default_value: 1
+  created: user_registered
+destination:
+  plugin: entity:user
+migration_dependencies:
+  required: []
+  optional: []

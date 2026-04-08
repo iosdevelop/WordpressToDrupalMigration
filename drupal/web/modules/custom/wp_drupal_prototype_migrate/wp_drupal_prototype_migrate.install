@@ -2,77 +2,148 @@
 
 declare(strict_types=1);
 
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
 use Drupal\field\Entity\FieldConfig;
 use Drupal\field\Entity\FieldStorageConfig;
 use Drupal\node\Entity\NodeType;
+use Drupal\taxonomy\Entity\Vocabulary;
 
 /**
  * Implements hook_install().
  */
 function wp_drupal_prototype_migrate_install(): void {
-  if (!NodeType::load('wp_migrated_page')) {
-    $content_type = NodeType::create([
-      'type' => 'wp_migrated_page',
-      'name' => 'WP Migrated Page',
-      'description' => 'Prototype destination type for imported WordPress pages.',
+  // Taxonomy vocabularies (must exist before field instances that reference them).
+  _wp_prototype_ensure_vocabulary('wp_section', 'WP Section');
+  _wp_prototype_ensure_vocabulary('wp_tags', 'WP Tags');
+
+  // Content types.
+  _wp_prototype_ensure_content_type('wp_migrated_page', 'WP Migrated Page', 'Generic destination for imported WordPress pages.');
+  _wp_prototype_ensure_content_type('wp_landing_page', 'WP Landing Page', 'Imported WordPress landing, service, or industry page.');
+  _wp_prototype_ensure_content_type('wp_resource', 'WP Resource', 'Imported WordPress resource, guide, or case study.');
+
+  // Field storages (one per field name, shared across all bundles).
+  _wp_drupal_prototype_migrate_ensure_field_storage('field_legacy_url', 'string', ['max_length' => 512]);
+  _wp_drupal_prototype_migrate_ensure_field_storage('field_seo_title', 'string', ['max_length' => 255]);
+  _wp_drupal_prototype_migrate_ensure_field_storage('field_seo_description', 'string_long');
+  _wp_drupal_prototype_migrate_ensure_field_storage('field_wp_section', 'entity_reference', [
+    'target_type' => 'taxonomy_term',
+  ]);
+  _wp_drupal_prototype_migrate_ensure_field_storage('field_wp_tags', 'entity_reference', [
+    'target_type' => 'taxonomy_term',
+  ], FieldStorageDefinitionInterface::CARDINALITY_UNLIMITED);
+  _wp_drupal_prototype_migrate_ensure_field_storage('field_wp_author', 'entity_reference', [
+    'target_type' => 'user',
+  ]);
+  _wp_drupal_prototype_migrate_ensure_field_storage('field_wp_featured_image', 'file', [
+    'uri_scheme' => 'public',
+    'display_field' => FALSE,
+  ]);
+
+  // Field instances on each content type bundle.
+  $bundles = ['wp_migrated_page', 'wp_landing_page', 'wp_resource'];
+  foreach ($bundles as $bundle) {
+    _wp_drupal_prototype_migrate_ensure_field_instance('field_legacy_url', 'Legacy URL', $bundle);
+    _wp_drupal_prototype_migrate_ensure_field_instance('field_seo_title', 'SEO Title', $bundle);
+    _wp_drupal_prototype_migrate_ensure_field_instance('field_seo_description', 'SEO Description', $bundle);
+    _wp_drupal_prototype_migrate_ensure_field_instance('field_wp_section', 'Section', $bundle, [
+      'handler' => 'default:taxonomy_term',
+      'handler_settings' => ['target_bundles' => ['wp_section' => 'wp_section']],
     ]);
-    $content_type->save();
+    _wp_drupal_prototype_migrate_ensure_field_instance('field_wp_tags', 'Tags', $bundle, [
+      'handler' => 'default:taxonomy_term',
+      'handler_settings' => ['target_bundles' => ['wp_tags' => 'wp_tags']],
+    ]);
+    _wp_drupal_prototype_migrate_ensure_field_instance('field_wp_author', 'Original Author', $bundle, [
+      'handler' => 'default:user',
+    ]);
+    _wp_drupal_prototype_migrate_ensure_field_instance('field_wp_featured_image', 'Featured Image', $bundle);
   }
 
-  _wp_drupal_prototype_migrate_ensure_field_storage('field_legacy_url', 'string', [
-    'max_length' => 512,
-  ]);
-  _wp_drupal_prototype_migrate_ensure_field_storage('field_seo_title', 'string', [
-    'max_length' => 255,
-  ]);
-  _wp_drupal_prototype_migrate_ensure_field_storage('field_seo_description', 'string_long');
-
-  _wp_drupal_prototype_migrate_ensure_field_instance('field_legacy_url', 'Legacy URL');
-  _wp_drupal_prototype_migrate_ensure_field_instance('field_seo_title', 'SEO Title');
-  _wp_drupal_prototype_migrate_ensure_field_instance('field_seo_description', 'SEO Description');
-
+  // Form and view display configuration.
   $display_repository = \Drupal::service('entity_display.repository');
+  foreach ($bundles as $bundle) {
+    _wp_prototype_configure_displays($display_repository, $bundle);
+  }
+}
 
-  $form_display = $display_repository->getFormDisplay('node', 'wp_migrated_page', 'default');
-  $form_display->setComponent('field_legacy_url', ['type' => 'string_textfield']);
-  $form_display->setComponent('field_seo_title', ['type' => 'string_textfield']);
-  $form_display->setComponent('field_seo_description', ['type' => 'string_textarea']);
-  $form_display->save();
+/**
+ * Creates a taxonomy vocabulary if it does not already exist.
+ */
+function _wp_prototype_ensure_vocabulary(string $vid, string $name): void {
+  if (!Vocabulary::load($vid)) {
+    Vocabulary::create([
+      'vid' => $vid,
+      'name' => $name,
+    ])->save();
+  }
+}
 
-  $view_display = $display_repository->getViewDisplay('node', 'wp_migrated_page', 'default');
-  $view_display->setComponent('field_legacy_url', ['type' => 'string']);
-  $view_display->setComponent('field_seo_title', ['type' => 'string']);
-  $view_display->setComponent('field_seo_description', ['type' => 'basic_string']);
-  $view_display->save();
+/**
+ * Creates a node content type if it does not already exist.
+ */
+function _wp_prototype_ensure_content_type(string $type, string $name, string $description): void {
+  if (!NodeType::load($type)) {
+    NodeType::create([
+      'type' => $type,
+      'name' => $name,
+      'description' => $description,
+    ])->save();
+  }
 }
 
 /**
  * Creates field storage when missing.
  */
-function _wp_drupal_prototype_migrate_ensure_field_storage(string $field_name, string $field_type, array $settings = []): void {
+function _wp_drupal_prototype_migrate_ensure_field_storage(string $field_name, string $field_type, array $settings = [], int $cardinality = 1): void {
   if (!FieldStorageConfig::loadByName('node', $field_name)) {
     FieldStorageConfig::create([
       'field_name' => $field_name,
       'entity_type' => 'node',
       'type' => $field_type,
       'settings' => $settings,
-      'cardinality' => 1,
+      'cardinality' => $cardinality,
       'translatable' => FALSE,
     ])->save();
   }
 }
 
 /**
- * Creates bundle field when missing.
+ * Creates a bundle field instance when missing.
  */
-function _wp_drupal_prototype_migrate_ensure_field_instance(string $field_name, string $label): void {
-  if (!FieldConfig::loadByName('node', 'wp_migrated_page', $field_name)) {
+function _wp_drupal_prototype_migrate_ensure_field_instance(string $field_name, string $label, string $bundle, array $settings = []): void {
+  if (!FieldConfig::loadByName('node', $bundle, $field_name)) {
     FieldConfig::create([
       'field_name' => $field_name,
       'entity_type' => 'node',
-      'bundle' => 'wp_migrated_page',
+      'bundle' => $bundle,
       'label' => $label,
       'required' => FALSE,
+      'settings' => $settings,
     ])->save();
   }
+}
+
+/**
+ * Configures default form and view displays for a content type bundle.
+ */
+function _wp_prototype_configure_displays(mixed $display_repository, string $bundle): void {
+  $form_display = $display_repository->getFormDisplay('node', $bundle, 'default');
+  $form_display->setComponent('field_legacy_url', ['type' => 'string_textfield']);
+  $form_display->setComponent('field_seo_title', ['type' => 'string_textfield']);
+  $form_display->setComponent('field_seo_description', ['type' => 'string_textarea']);
+  $form_display->setComponent('field_wp_section', ['type' => 'options_select']);
+  $form_display->setComponent('field_wp_tags', ['type' => 'options_select']);
+  $form_display->setComponent('field_wp_author', ['type' => 'options_select']);
+  $form_display->setComponent('field_wp_featured_image', ['type' => 'file_generic']);
+  $form_display->save();
+
+  $view_display = $display_repository->getViewDisplay('node', $bundle, 'default');
+  $view_display->setComponent('field_legacy_url', ['type' => 'string']);
+  $view_display->setComponent('field_seo_title', ['type' => 'string']);
+  $view_display->setComponent('field_seo_description', ['type' => 'basic_string']);
+  $view_display->setComponent('field_wp_section', ['type' => 'entity_reference_label']);
+  $view_display->setComponent('field_wp_tags', ['type' => 'entity_reference_label']);
+  $view_display->setComponent('field_wp_author', ['type' => 'entity_reference_label']);
+  $view_display->setComponent('field_wp_featured_image', ['type' => 'file_default']);
+  $view_display->save();
 }

@@ -1,0 +1,11 @@
+slug_prefix,content_type,destination_url
+enterprise-governance-and-compliance-program-roadmap-2026,wp_migrated_page,/about/governance
+company-team-directory,wp_landing_page,/about
+company,wp_landing_page,/about
+about,wp_landing_page,/about
+service,wp_landing_page,/services
+industry,wp_landing_page,/industries
+resource,wp_resource,/resources
+legal,wp_migrated_page,/legal
+contact,wp_landing_page,/contact
+locations,wp_landing_page,/contact/locations

@@ -1,6 +1,6 @@
 name: WordPress Drupal Prototype Migrate
 type: module
-description: Prototype migration scaffolding for WordPress to Drupal page and redirect import.
+description: Prototype migration scaffolding for WordPress to Drupal page, taxonomy, user, media, and redirect import.
 package: Custom
 core_version_requirement: ^10
 version: 1.0.0
@@ -10,6 +10,9 @@ dependencies:
   - drupal:path
   - drupal:field
   - drupal:text
+  - drupal:file
+  - drupal:taxonomy
+  - drupal:user
   - drupal:migrate
   - migrate_plus:migrate_plus
   - migrate_tools:migrate_tools
