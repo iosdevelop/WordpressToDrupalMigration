@@ -16,15 +16,11 @@
       </a>
 
       <nav class="ps-nav" aria-label="Primary menu">
-        {% if page.primary_menu %}
-          {{ page.primary_menu }}
-        {% else %}
-          <ul class="ps-nav-list">
-            {% for item in prototype_showcase_nav_links %}
-              <li><a href="{{ item.url }}">{{ item.title }}</a></li>
-            {% endfor %}
-          </ul>
-        {% endif %}
+        <ul class="ps-nav-list">
+          {% for item in prototype_showcase_nav_links %}
+            <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+          {% endfor %}
+        </ul>
       </nav>
     </div>
   </header>
