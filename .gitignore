@@ -24,3 +24,11 @@
 # Local DDEV snapshots and build internals.
 **/.ddev/.db_snapshots/
 **/.ddev/.webimageBuild/
+
+# Local Python tooling.
+.venv/
+__pycache__/
+**/__pycache__/
+
+# Local crawl exports.
+crawl-output/
