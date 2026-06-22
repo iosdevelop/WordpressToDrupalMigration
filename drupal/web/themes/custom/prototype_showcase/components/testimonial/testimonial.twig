@@ -1,0 +1,19 @@
+<figure class="ps-testimonial ps-testimonial--{{ theme|default('dark') }}">
+  {% if image and image.src %}
+    <div class="ps-testimonial-image">
+      <img src="{{ image.src }}" alt="{{ image.alt|default('') }}"{% if image.width %} width="{{ image.width }}"{% endif %}{% if image.height %} height="{{ image.height }}"{% endif %} loading="lazy">
+    </div>
+  {% endif %}
+  <div class="ps-testimonial-copy">
+    <blockquote>{{ quote|raw }}</blockquote>
+    <figcaption>
+      <strong>{{ cite_name }}</strong>
+      {% set details = [program, program_year, school, workplace_name]|filter(value => value) %}
+      {% if details %}<span>{{ details|join(' · ') }}</span>{% endif %}
+    </figcaption>
+    {% if link_url and link_text %}
+      <a class="ps-text-link" href="{{ link_url }}"{% if accessible_link_text %} aria-label="{{ accessible_link_text }}"{% endif %}>{{ link_text }} <span aria-hidden="true">→</span></a>
+    {% endif %}
+  </div>
+</figure>
+

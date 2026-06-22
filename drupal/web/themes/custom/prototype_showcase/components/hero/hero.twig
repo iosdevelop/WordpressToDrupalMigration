@@ -1,0 +1,9 @@
+<section class="ps-hero ps-canvas-section">
+  <div class="ps-hero-copy">
+    {% if eyebrow %}<p class="ps-eyebrow">{{ eyebrow }}</p>{% endif %}
+    <h1>{{ heading }}</h1>
+    {% if body %}<p>{{ body }}</p>{% endif %}
+    {% if link_text and link_url %}<a class="ps-button" href="{{ link_url }}">{{ link_text }}</a>{% endif %}
+  </div>
+  <div class="ps-hero-art" aria-hidden="true"><span class="ps-hero-ring"></span><strong>Serve.<br>Connect.<br>Advance.</strong></div>
+</section>

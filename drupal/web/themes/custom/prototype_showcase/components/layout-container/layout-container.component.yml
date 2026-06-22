@@ -1,0 +1,22 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: Layout Container
+description: Grid container matching the exported Canvas layout component.
+props:
+  type: object
+  properties:
+    heading:
+      type: string
+      title: Heading
+      examples: ['Find your next step']
+    columns:
+      type: integer
+      title: Columns
+      enum: [2, 3]
+      meta:enum:
+        2: Two
+        3: Three
+      examples: [3]
+slots:
+  content:
+    title: Layout items
+    description: Place cards or text components here.

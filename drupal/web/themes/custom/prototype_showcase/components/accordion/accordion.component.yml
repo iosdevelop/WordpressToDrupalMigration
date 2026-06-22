@@ -1,0 +1,15 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: Accordion Item
+description: Expandable content item.
+props:
+  type: object
+  required: [title]
+  properties:
+    title:
+      type: string
+      title: Title
+      examples: ['What came from the live configuration?']
+    content:
+      type: string
+      title: Content
+      examples: ['The component hierarchy, slot relationships, pattern names, and composition rules.']

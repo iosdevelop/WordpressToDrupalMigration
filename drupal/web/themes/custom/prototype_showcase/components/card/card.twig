@@ -1,0 +1,6 @@
+<article class="ps-card">
+  {% if number %}<span class="ps-card-number">{{ number }}</span>{% endif %}
+  <h3>{{ heading }}</h3>
+  {% if content %}<p>{{ content }}</p>{% endif %}
+  {% if link_text and link_url %}<a href="{{ link_url }}">{{ link_text }} <span aria-hidden="true">→</span></a>{% endif %}
+</article>

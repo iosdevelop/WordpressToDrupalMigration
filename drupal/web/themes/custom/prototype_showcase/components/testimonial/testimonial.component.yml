@@ -1,0 +1,74 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: IVMF Testimonial
+description: Testimonial analogue matching the inputs exposed by the sandbox Canvas component.
+props:
+  type: object
+  required:
+    - quote
+    - cite_name
+  properties:
+    quote:
+      type: string
+      title: Quote
+      description: The testimonial quote content
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - '<p>IVMF gave me the tools and community to take the next step.</p>'
+    cite_name:
+      type: string
+      title: Citation Name
+      description: Name of the person being quoted
+      examples: ['Jill Leary']
+    program:
+      type: string
+      title: Program/Department
+      description: Department or program affiliation
+      examples: ['Program Name']
+    program_year:
+      type: string
+      title: Program Year
+      description: Graduation year or program year
+      examples: ["'22"]
+    school:
+      type: string
+      title: School/College
+      description: School or College name
+      examples: ['School or College Name']
+    workplace_name:
+      type: string
+      title: Workplace Name
+      examples: ['Lorem Ipsum Technologies']
+    theme:
+      type: string
+      title: Theme
+      description: Visual theme for the testimonial
+      enum: [dark, light]
+      default: dark
+      examples: [dark]
+    image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Testimonial Image
+      description: Image for the testimonial
+      examples:
+        - src: https://placehold.co/640x640
+          alt: Testimonial portrait
+          width: 640
+          height: 640
+    link_url:
+      type: string
+      format: uri-reference
+      title: Link URL
+      description: Accepts an internal page path or external URL
+      examples: ['/canvas-layout-demo']
+    link_text:
+      type: string
+      title: Link Text
+      description: Text for the call-to-action link
+      examples: ['Call to Action']
+    accessible_link_text:
+      type: string
+      title: Accessible Link Text
+      description: More detailed accessible text when the visible link text is too vague
+

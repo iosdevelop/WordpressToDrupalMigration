@@ -1,0 +1,4 @@
+<section class="ps-accordion-section ps-canvas-section">
+  {% if heading %}<div class="ps-section-heading"><h2>{{ heading }}</h2></div>{% endif %}
+  <div class="ps-accordion-list">{% block accordion_items %}{% endblock %}</div>
+</section>

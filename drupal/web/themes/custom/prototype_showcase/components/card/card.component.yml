@@ -1,0 +1,28 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: IVMF Card
+description: Linked feature card.
+props:
+  type: object
+  required: [heading]
+  properties:
+    number:
+      type: string
+      title: Number
+      examples: ['01']
+    heading:
+      type: string
+      title: Heading
+      examples: ['Career training']
+    content:
+      type: string
+      title: Content
+      examples: ['Build practical skills and translate military experience into a meaningful civilian career.']
+    link_text:
+      type: string
+      title: Link text
+      examples: ['Explore training']
+    link_url:
+      type: string
+      format: uri-reference
+      title: Link URL
+      examples: ['/canvas-layout-demo']

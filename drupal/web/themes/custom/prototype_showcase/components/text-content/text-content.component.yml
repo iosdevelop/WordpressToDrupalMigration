@@ -1,0 +1,15 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: Text Content
+description: Flexible heading and body text.
+props:
+  type: object
+  required: [heading]
+  properties:
+    heading:
+      type: string
+      title: Heading
+      examples: ['One flexible system. Many stories.']
+    content:
+      type: string
+      title: Content
+      examples: ['The local prototype mirrors the visual grammar exposed by the live Canvas export.']

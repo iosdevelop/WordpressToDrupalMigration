@@ -1,6 +1,6 @@
 # wp_drupal_prototype_migrate
 
-Custom Drupal 10 module that contains:
+Custom Drupal 10/11 module that contains:
 
 - migration YAMLs for prototype page import and redirect import
 - process plugins to normalize legacy URLs

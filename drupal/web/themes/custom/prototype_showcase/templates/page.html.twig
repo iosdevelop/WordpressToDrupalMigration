@@ -4,15 +4,12 @@
  * Custom page template for the Prototype Showcase theme.
  */
 #}
-<div class="ps-bg-orb ps-bg-orb-one"></div>
-<div class="ps-bg-orb ps-bg-orb-two"></div>
-
 <div class="ps-shell">
   <header class="ps-header">
     <div class="ps-header-inner">
       <a class="ps-brand" href="{{ path('<front>') }}">
-        <span class="ps-brand-chip">PS</span>
-        <span class="ps-brand-name">{{ site_name ?: 'Prototype Showcase' }}</span>
+        <span class="ps-brand-chip">IVMF</span>
+        <span class="ps-brand-name">{{ site_name ?: 'Institute for Veterans and Military Families' }}</span>
       </a>
 
       <nav class="ps-nav" aria-label="Primary menu">
@@ -27,32 +24,96 @@
 
   <main class="ps-main">
     {% if is_front %}
-      <section class="ps-hero">
+      <section class="ps-hero ps-canvas-section" aria-labelledby="canvas-demo-title">
         <div class="ps-hero-copy">
-          <p class="ps-eyebrow">Drupal Migration Prototype</p>
-          <h1>Confident Demo Design for Stakeholder Reviews</h1>
+          <p class="ps-eyebrow">Syracuse University &middot; IVMF</p>
+          <h1 id="canvas-demo-title">Empowering the military-connected community</h1>
           <p>
-            This theme is optimized for show-focus storytelling: clear structure,
-            strong visuals, and a modern layout that elevates migration outcomes.
+            A local Drupal demonstration reconstructed from the production Canvas
+            component configuration: modular, accessible, and ready for migrated content.
           </p>
+          <a class="ps-button" href="#canvas-patterns">Explore the programs</a>
         </div>
-        <div class="ps-stat-grid">
-          <article class="ps-stat-card">
-            <strong>CSV-Driven</strong>
-            <span>Input Pipeline</span>
+        <div class="ps-hero-art" aria-hidden="true">
+          <span class="ps-hero-ring"></span>
+          <strong>Serve.<br>Connect.<br>Advance.</strong>
+        </div>
+      </section>
+
+      <section class="ps-canvas-section" id="canvas-patterns" aria-labelledby="programs-title">
+        <div class="ps-section-heading">
+          <p class="ps-eyebrow">Three Card Container</p>
+          <h2 id="programs-title">Find your next step</h2>
+          <p>Production Canvas composes a layout container with three reusable card components.</p>
+        </div>
+        <div class="ps-card-grid">
+          <article class="ps-card">
+            <span class="ps-card-number">01</span>
+            <h3>Career training</h3>
+            <p>Build practical skills and translate military experience into a meaningful civilian career.</p>
+            <a href="#local-content">Explore training <span aria-hidden="true">&rarr;</span></a>
           </article>
-          <article class="ps-stat-card">
-            <strong>Redirects</strong>
-            <span>Continuity Built-In</span>
+          <article class="ps-card ps-card-accent">
+            <span class="ps-card-number">02</span>
+            <h3>Entrepreneurship</h3>
+            <p>Turn an idea into a resilient business with expert instruction and a nationwide network.</p>
+            <a href="#local-content">Build a business <span aria-hidden="true">&rarr;</span></a>
           </article>
-          <article class="ps-stat-card">
-            <strong>275 &#8594; 125</strong>
-            <span>Scale Narrative</span>
+          <article class="ps-card">
+            <span class="ps-card-number">03</span>
+            <h3>Community support</h3>
+            <p>Connect to resources designed for service members, veterans, and military families.</p>
+            <a href="#local-content">Find resources <span aria-hidden="true">&rarr;</span></a>
           </article>
-          <article class="ps-stat-card">
-            <strong>Migrate API</strong>
-            <span>Drupal Native</span>
-          </article>
+        </div>
+      </section>
+
+      <section class="ps-checkerboard ps-canvas-section" aria-label="Canvas checkerboard pattern">
+        <div class="ps-checkerboard-art ps-art-training" aria-hidden="true"><span>IVMF</span></div>
+        <div class="ps-checkerboard-copy">
+          <p class="ps-eyebrow">Two Card Checkerboard</p>
+          <h2>Opportunity after service</h2>
+          <p>Alternating media and text modules create a strong editorial rhythm while keeping every section independently reusable.</p>
+          <a class="ps-text-link" href="#local-content">See migration-ready content <span aria-hidden="true">&rarr;</span></a>
+        </div>
+        <div class="ps-checkerboard-copy">
+          <p class="ps-eyebrow">Reusable component</p>
+          <h2>Built around real journeys</h2>
+          <p>Canvas component inputs map cleanly to headings, rich text, media, captions, and calls to action.</p>
+          <a class="ps-text-link" href="#local-content">Learn how it maps <span aria-hidden="true">&rarr;</span></a>
+        </div>
+        <div class="ps-checkerboard-art ps-art-community" aria-hidden="true"><span>125</span><small>destination pages</small></div>
+      </section>
+
+      <section class="ps-two-column ps-canvas-section" aria-labelledby="impact-title">
+        <div>
+          <p class="ps-eyebrow">Two Column Text</p>
+          <h2 id="impact-title">One flexible system.<br>Many stories.</h2>
+        </div>
+        <div>
+          <p class="ps-lead">The local prototype now mirrors the visual grammar exposed by the live Canvas export without depending on production-only code.</p>
+          <p>This gives stakeholders a faithful layout target today and leaves a clean path to native Canvas once the Syracuse component theme is available.</p>
+        </div>
+      </section>
+
+      <section class="ps-accordion-section ps-canvas-section" aria-labelledby="faq-title">
+        <div class="ps-section-heading">
+          <p class="ps-eyebrow">Accordion Container 3</p>
+          <h2 id="faq-title">How the reconstruction works</h2>
+        </div>
+        <div class="ps-accordion-list">
+          <details open>
+            <summary>What came from the live configuration?</summary>
+            <p>The component hierarchy, slot relationships, pattern names, input types, and two- and three-column composition rules.</p>
+          </details>
+          <details>
+            <summary>Why not import the archive directly?</summary>
+            <p>It depends on Drupal Canvas, many contributed modules, and the private Syracuse theme. Importing it into this Drupal 10 prototype would fail dependency validation.</p>
+          </details>
+          <details>
+            <summary>Can migrated pages use this design?</summary>
+            <p>Yes. The content region below continues to render Drupal nodes normally, while this gallery establishes the component-driven presentation target.</p>
+          </details>
         </div>
       </section>
     {% endif %}
@@ -69,7 +130,7 @@
       </section>
     {% endif %}
 
-    <div class="ps-layout">
+    <div class="ps-layout" id="local-content">
       <section class="ps-panel ps-fade ps-delay-2">
         {% if page.content %}
           {{ page.content }}

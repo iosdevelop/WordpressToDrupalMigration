@@ -1,0 +1,4 @@
+<section class="ps-canvas-section">
+  {% if heading %}<div class="ps-section-heading"><h2>{{ heading }}</h2></div>{% endif %}
+  <div class="ps-card-grid ps-columns-{{ columns|default(3) }}">{% block content %}{% endblock %}</div>
+</section>

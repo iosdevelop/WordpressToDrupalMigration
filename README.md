@@ -4,7 +4,7 @@ Prototype that demonstrates a practical WordPress-to-Drupal migration workflow u
 
 - deterministic WordPress fixtures (WP-CLI)
 - export and mapping scripts
-- Drupal 10 custom migration module
+- Drupal 11 custom migration module
 - sample redirect migration concept
 - DDEV-based local environments for both CMSs
 
@@ -95,7 +95,7 @@ The mapping script also copies data into Drupal module-local import files:
 - `drupal/web/modules/custom/wp_drupal_prototype_migrate/data/wp-pages.csv`
 - `drupal/web/modules/custom/wp_drupal_prototype_migrate/data/sample-redirects.csv`
 
-### 3) Bootstrap Drupal 10 (`/drupal`)
+### 3) Bootstrap Drupal 11 (`/drupal`)
 
 ```bash
 cd drupal
@@ -111,8 +111,26 @@ ddev drush site:install standard \
 
 # Enable migration dependencies and custom prototype module.
 ddev drush en migrate_plus migrate_tools migrate_source_csv redirect wp_drupal_prototype_migrate -y
+ddev drush theme:enable prototype_showcase -y
+ddev drush config:set system.theme default prototype_showcase -y
 ddev drush cr
 ```
+
+The custom theme front page includes a local reconstruction of the reusable
+layout patterns found in the supplied IVMF Canvas configuration export. See
+[the Canvas configuration analysis](docs/live-canvas-config-analysis.md) for
+the recovered component model and the limits of a config-only reconstruction.
+
+To safely synchronize the portable content structure from the June 22 sandbox
+export without importing production services or permissions:
+
+```bash
+./scripts/import-sandbox-structure.sh
+```
+
+The script uses an explicit allowlist for the FAQ, Landing Page, People, and
+Program Page types and their fields/displays. It never imports authentication,
+roles, S3, mail, Redis, environment-specific modules, or private-theme config.
 
 ### 4) Run sample migrations
 
