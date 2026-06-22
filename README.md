@@ -204,6 +204,24 @@ This is intentionally scoped and not production-ready:
 - no multilingual handling
 - no automated QA dashboards yet
 
+## IA Workbook Content Extraction
+
+The current information architecture workbook is stored at
+`data/IVMF-Website-2026-Info-Architecture-v01.xlsx`. Extract migration-ready
+content from its WordPress URL inventory with:
+
+```bash
+/home/mozart/.venvs/ivmf-workbook/bin/python \
+  scripts/extract_ivmf_content.py
+```
+
+The ignored local `data/crawl-output/` directory receives page summaries,
+full main-content HTML/text, image references, testimonial instances, a
+deduplicated testimonial repository, and People directory/profile data. Target
+Drupal page matches in the inventory are suggestions and require editorial
+review; the source workbook currently contains only six manually confirmed
+redirect selections.
+
 ## Scaling Path: 275 WordPress Pages -> 125 Drupal Pages
 
 The prototype is structured so scaling is mechanical, not architectural rework:
