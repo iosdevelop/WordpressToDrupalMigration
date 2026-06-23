@@ -222,6 +222,20 @@ Drupal page matches in the inventory are suggestions and require editorial
 review; the source workbook currently contains only six manually confirmed
 redirect selections.
 
+To wire those crawl outputs into Canvas pages only, run:
+
+```bash
+cd drupal
+ddev drush php:script web/modules/custom/wp_drupal_prototype_migrate/scripts/import_ivmf_canvas.php
+```
+
+This creates sandbox-safe `/canvas-import/...` pages for:
+
+- a Canvas component map page
+- representative imported IVMF content pages
+- a People directory and sample people profiles
+- a testimonials repository
+
 ## Scaling Path: 275 WordPress Pages -> 125 Drupal Pages
 
 The prototype is structured so scaling is mechanical, not architectural rework:

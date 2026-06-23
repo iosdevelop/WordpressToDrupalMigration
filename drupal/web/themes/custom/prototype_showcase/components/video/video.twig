@@ -1,0 +1,9 @@
+<section class="ps-video">
+  {% if heading %}<h3>{{ heading }}</h3>{% endif %}
+  {% if kaltura_video_id %}
+    <div class="ps-video-frame" aria-label="{{ heading|default('IVMF video') }}">
+      <span>Video {{ kaltura_video_id }}</span>
+    </div>
+  {% endif %}
+  {% if caption %}<p>{{ caption }}</p>{% endif %}
+</section>

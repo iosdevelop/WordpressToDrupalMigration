@@ -1,0 +1,36 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: IVMF Fact Stats
+description: Statistics section from the live Canvas pattern.
+props:
+  type: object
+  required: [stat_1]
+  properties:
+    section_title:
+      type: string
+      title: Section Title
+      examples: [Stats and Facts]
+    content_text_area:
+      type: string
+      title: Content Text Area
+      contentMediaType: text/html
+      x-formatting-context: block
+      examples:
+        - >-
+          Curabitur sapien diam, interdum at malesuada vel, fermentum ac mi.
+          Duis molestie sem et enim tristique, in efficitur felis bibendum.
+    stat_1:
+      type: string
+      title: Stat 1
+      examples: ['150+ Veterans Served']
+    stat_2:
+      type: string
+      title: Stat 2
+      examples: ['25 Programs Offered']
+    stat_3:
+      type: string
+      title: Stat 3
+      examples: ['40 Alumni Events']
+    stat_4:
+      type: string
+      title: Stat 4
+      examples: ['12 Partner Organizations']

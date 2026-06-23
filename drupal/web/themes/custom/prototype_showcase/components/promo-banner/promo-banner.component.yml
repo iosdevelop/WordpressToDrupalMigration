@@ -1,0 +1,46 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: IVMF Promo Banner
+description: Featured content banner with image and one or two links.
+props:
+  type: object
+  properties:
+    heading:
+      type: string
+      title: Heading
+    content:
+      type: string
+      title: Content
+    image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Image
+    image_position:
+      type: string
+      title: Image Position
+      enum: [left, right]
+      default: right
+    theme:
+      type: string
+      title: Theme
+      enum: [dark, light]
+      default: dark
+    link_url:
+      type: string
+      format: uri-reference
+      title: Link URL
+    link_text:
+      type: string
+      title: Link Text
+    accessible_link_text:
+      type: string
+      title: Accessible Link Text
+    second_link_url:
+      type: string
+      format: uri-reference
+      title: Optional Second Link URL
+    second_link_text:
+      type: string
+      title: Optional Second Link Text
+    second_accessible_link_text:
+      type: string
+      title: Optional Accessible Link Text

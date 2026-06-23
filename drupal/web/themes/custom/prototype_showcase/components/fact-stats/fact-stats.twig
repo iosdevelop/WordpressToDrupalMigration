@@ -1,0 +1,17 @@
+<section class="ps-stats ps-canvas-section">
+  {% if section_title or content_text_area %}
+    <div class="ps-section-heading">
+      {% if section_title %}<p class="ps-eyebrow">Stats</p><h2>{{ section_title }}</h2>{% endif %}
+      {% if content_text_area %}<p>{{ content_text_area }}</p>{% endif %}
+    </div>
+  {% endif %}
+  <div class="ps-stats-grid">
+    {% for stat in [stat_1, stat_2, stat_3, stat_4] %}
+      {% if stat %}
+        <div class="ps-stat">
+          <strong>{{ stat }}</strong>
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>

@@ -1,0 +1,87 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: IVMF Full-Bleed Cards
+description: Three-up hero cards matching the live Canvas component shape.
+props:
+  type: object
+  properties:
+    heading:
+      type: string
+      title: Heading
+    text:
+      type: string
+      title: Text
+    gradient_intensity:
+      type: string
+      title: Gradient Intensity
+      enum: [low, medium, high]
+      default: medium
+    card_1_image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Card 1 Image
+    card_1_video_id:
+      type: string
+      title: Card 1 Video ID
+    card_1_title:
+      type: string
+      title: Card 1 Title
+    card_1_url:
+      type: string
+      format: uri-reference
+      title: Card 1 URL
+    card_1_accessible_link_text:
+      type: string
+      title: Card 1 Accessible Link Text
+    card_1_read_time:
+      type: string
+      title: Card 1 Read Time
+    card_2_image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Card 2 Image
+    card_2_video_id:
+      type: string
+      title: Card 2 Video ID
+    card_2_title:
+      type: string
+      title: Card 2 Title
+    card_2_url:
+      type: string
+      format: uri-reference
+      title: Card 2 URL
+    card_2_accessible_link_text:
+      type: string
+      title: Card 2 Accessible Link Text
+    card_2_read_time:
+      type: string
+      title: Card 2 Read Time
+    card_3_image:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Card 3 Image
+    card_3_video_id:
+      type: string
+      title: Card 3 Video ID
+    card_3_title:
+      type: string
+      title: Card 3 Title
+    card_3_url:
+      type: string
+      format: uri-reference
+      title: Card 3 URL
+    card_3_accessible_link_text:
+      type: string
+      title: Card 3 Accessible Link Text
+    card_3_read_time:
+      type: string
+      title: Card 3 Read Time
+    bottom_cta_text:
+      type: string
+      title: Bottom CTA Text
+    bottom_cta_url:
+      type: string
+      format: uri-reference
+      title: Bottom CTA URL
+    bottom_cta_accessible_link_text:
+      type: string
+      title: Bottom CTA Accessible Link Text

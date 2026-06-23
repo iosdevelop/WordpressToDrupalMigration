@@ -1,0 +1,18 @@
+<section class="ps-action-bar ps-canvas-section">
+  <div class="ps-action-bar-grid">
+    {% for i in [1, 2, 3] %}
+      {% set heading = attribute(_context, 'column_' ~ i ~ '_heading') %}
+      {% set description = attribute(_context, 'column_' ~ i ~ '_description') %}
+      {% set link_text = attribute(_context, 'column_' ~ i ~ '_link_text') %}
+      {% set link_url = attribute(_context, 'column_' ~ i ~ '_link_url') %}
+      {% set accessible = attribute(_context, 'column_' ~ i ~ '_accessible_link_text') %}
+      <div class="ps-action-bar-column">
+        {% if heading %}<h3>{{ heading }}</h3>{% endif %}
+        {% if description %}<p>{{ description }}</p>{% endif %}
+        {% if link_text and link_url %}
+          <a href="{{ link_url }}">{{ link_text }}{% if accessible %}<span class="visually-hidden">{{ accessible }}</span>{% endif %}</a>
+        {% endif %}
+      </div>
+    {% endfor %}
+  </div>
+</section>

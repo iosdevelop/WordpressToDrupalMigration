@@ -1,0 +1,37 @@
+<section class="ps-full-bleed-cards ps-canvas-section ps-full-bleed-cards--{{ gradient_intensity|default('medium') }}">
+  {% if heading or text %}
+    <div class="ps-section-heading">
+      {% if heading %}<p class="ps-eyebrow">Full-Bleed Cards</p><h2>{{ heading }}</h2>{% endif %}
+      {% if text %}<p>{{ text }}</p>{% endif %}
+    </div>
+  {% endif %}
+  <div class="ps-full-bleed-card-grid">
+    {% for card_index in [1, 2, 3] %}
+      {% set image = attribute(_context, 'card_' ~ card_index ~ '_image') %}
+      {% set video_id = attribute(_context, 'card_' ~ card_index ~ '_video_id') %}
+      {% set title = attribute(_context, 'card_' ~ card_index ~ '_title') %}
+      {% set url = attribute(_context, 'card_' ~ card_index ~ '_url') %}
+      {% set alt_text = attribute(_context, 'card_' ~ card_index ~ '_accessible_link_text') %}
+      {% set read_time = attribute(_context, 'card_' ~ card_index ~ '_read_time') %}
+      {% if title %}
+        <article class="ps-full-bleed-card">
+          {% if image %}
+            <img src="{{ image.src }}" alt="{{ image.alt|default('') }}">
+          {% elseif video_id %}
+            <div class="ps-full-bleed-card-video" aria-hidden="true">Video {{ video_id }}</div>
+          {% endif %}
+          <div class="ps-full-bleed-card-copy">
+            <h3>{{ title }}</h3>
+            {% if read_time %}<p class="ps-full-bleed-card-meta">{{ read_time }}</p>{% endif %}
+            {% if url %}<a href="{{ url }}">{{ alt_text|default(title) }} <span aria-hidden="true">→</span></a>{% endif %}
+          </div>
+        </article>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% if bottom_cta_text and bottom_cta_url %}
+    <p class="ps-full-bleed-cards-cta">
+      <a href="{{ bottom_cta_url }}">{{ bottom_cta_text }}{% if bottom_cta_accessible_link_text %}<span class="visually-hidden">{{ bottom_cta_accessible_link_text }}</span>{% endif %}</a>
+    </p>
+  {% endif %}
+</section>

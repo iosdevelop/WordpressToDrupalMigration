@@ -1,0 +1,54 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: IVMF Action Bar
+description: Three-column CTA strip.
+props:
+  type: object
+  properties:
+    column_1_heading:
+      type: string
+      title: Column 1 Heading
+    column_1_description:
+      type: string
+      title: Column 1 Description
+    column_1_link_text:
+      type: string
+      title: Column 1 Link Text
+    column_1_accessible_link_text:
+      type: string
+      title: Column 1 Accessible Link Text
+    column_1_link_url:
+      type: string
+      format: uri-reference
+      title: Column 1 Link URL
+    column_2_heading:
+      type: string
+      title: Column 2 Heading
+    column_2_description:
+      type: string
+      title: Column 2 Description
+    column_2_link_text:
+      type: string
+      title: Column 2 Link Text
+    column_2_accessible_link_text:
+      type: string
+      title: Column 2 Accessible Link Text
+    column_2_link_url:
+      type: string
+      format: uri-reference
+      title: Column 2 Link URL
+    column_3_heading:
+      type: string
+      title: Column 3 Heading
+    column_3_description:
+      type: string
+      title: Column 3 Description
+    column_3_link_text:
+      type: string
+      title: Column 3 Link Text
+    column_3_accessible_link_text:
+      type: string
+      title: Column 3 Accessible Link Text
+    column_3_link_url:
+      type: string
+      format: uri-reference
+      title: Column 3 Link URL

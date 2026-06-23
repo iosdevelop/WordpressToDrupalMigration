@@ -1,0 +1,19 @@
+<section class="ps-promo-banner ps-promo-banner--{{ theme|default('dark') }} ps-promo-banner--image-{{ image_position|default('right') }} ps-canvas-section">
+  <div class="ps-promo-banner-copy">
+    {% if heading %}<p class="ps-eyebrow">Promo Banner</p><h2>{{ heading }}</h2>{% endif %}
+    {% if content %}<p>{{ content }}</p>{% endif %}
+    <div class="ps-promo-banner-links">
+      {% if link_text and link_url %}
+        <a class="ps-button" href="{{ link_url }}">{{ link_text }}{% if accessible_link_text %}<span class="visually-hidden">{{ accessible_link_text }}</span>{% endif %}</a>
+      {% endif %}
+      {% if second_link_text and second_link_url %}
+        <a class="ps-text-link" href="{{ second_link_url }}">{{ second_link_text }}{% if second_accessible_link_text %}<span class="visually-hidden">{{ second_accessible_link_text }}</span>{% endif %}</a>
+      {% endif %}
+    </div>
+  </div>
+  {% if image %}
+    <figure class="ps-promo-banner-image">
+      <img src="{{ image.src }}" alt="{{ image.alt|default('') }}">
+    </figure>
+  {% endif %}
+</section>

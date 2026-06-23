@@ -1,0 +1,37 @@
+<section class="ps-media-gallery ps-canvas-section">
+  <div class="ps-section-heading">
+    <p class="ps-eyebrow">Media Gallery</p>
+    <h2>Selected imagery</h2>
+  </div>
+  <div class="ps-media-gallery-grid">
+    <div class="ps-media-gallery-top ps-media-gallery-top--{{ top_row_image_1_orientation|default('left') }}">
+      {% if top_row_image_1 %}
+        <figure class="ps-media-gallery-tile ps-media-gallery-tile--large">
+          <img src="{{ top_row_image_1.src }}" alt="{{ top_row_image_1.alt|default('') }}">
+        </figure>
+      {% endif %}
+      {% if top_row_image_2 %}
+        <figure class="ps-media-gallery-tile ps-media-gallery-tile--{{ top_row_image_2_orientation|default('landscape') }}">
+          <img src="{{ top_row_image_2.src }}" alt="{{ top_row_image_2.alt|default('') }}">
+        </figure>
+      {% endif %}
+      {% if top_row_image_3 %}
+        <figure class="ps-media-gallery-tile ps-media-gallery-tile--small">
+          <img src="{{ top_row_image_3.src }}" alt="{{ top_row_image_3.alt|default('') }}">
+        </figure>
+      {% endif %}
+    </div>
+    <div class="ps-media-gallery-bottom ps-media-gallery-bottom--{{ bottom_row_image_4_orientation|default('full') }}">
+      {% if bottom_row_image_4 %}
+        <figure class="ps-media-gallery-tile ps-media-gallery-tile--bottom ps-media-gallery-tile--bottom-main">
+          <img src="{{ bottom_row_image_4.src }}" alt="{{ bottom_row_image_4.alt|default('') }}">
+        </figure>
+      {% endif %}
+      {% if bottom_row_image_5 %}
+        <figure class="ps-media-gallery-tile ps-media-gallery-tile--bottom ps-media-gallery-tile--bottom-alt">
+          <img src="{{ bottom_row_image_5.src }}" alt="{{ bottom_row_image_5.alt|default('') }}">
+        </figure>
+      {% endif %}
+    </div>
+  </div>
+</section>

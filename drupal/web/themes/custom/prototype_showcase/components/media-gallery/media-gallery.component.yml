@@ -1,0 +1,55 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: IVMF Media Gallery
+description: Image mosaic matching the exported Canvas gallery structure.
+props:
+  type: object
+  properties:
+    top_row_image_1:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Top Row - Image 1
+      description: Large image to display in the top row
+    top_row_image_1_orientation:
+      type: string
+      title: Image 1 Orientation
+      enum: [left, right]
+      meta:enum:
+        left: Left
+        right: Right
+      default: left
+    top_row_image_2:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Top Row - Image 2
+      description: Second image in top row
+    top_row_image_2_orientation:
+      type: string
+      title: Image 2 Orientation
+      enum: [portrait, landscape]
+      meta:enum:
+        portrait: Portrait
+        landscape: Landscape
+      default: landscape
+    top_row_image_3:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Top Row - Image 3
+      description: Third image in top row
+    bottom_row_image_4:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Bottom Row - Image 4
+      description: First image in bottom row
+    bottom_row_image_4_orientation:
+      type: string
+      title: Image 4 Orientation
+      enum: [full, half]
+      meta:enum:
+        full: Full width
+        half: Half width
+      default: full
+    bottom_row_image_5:
+      $ref: json-schema-definitions://canvas.module/image
+      type: object
+      title: Bottom Row - Image 5
+      description: Second image in bottom row
