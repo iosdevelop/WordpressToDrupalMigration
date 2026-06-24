@@ -376,6 +376,25 @@ foreach ([
   'Applied Research',
   'Apply for the Bernard D. and Louise C. Rostker IVMF Dissertation Research Fund',
   'Articles Archive',
+  'Camp Lejeune',
+  'Charleston, SC',
+  'Community of Practice - Scholarships',
+  'Employing Military Spouses – The Force Behind the Force Series',
+  'Enhancing New Mexico Veteran Services',
+  'Entrepreneurship Bootcamp for Veterans’ Families',
+  'Fort Campbell',
+  'Fort Drum',
+  'Fort Hood',
+  'Fort Knox',
+  'Google AI Essentials',
+  'Hampton Roads',
+  'Hobbies, Sports & Games',
+  'IVMF Policy Priorities',
+  'Joint Base Lewis-McChord',
+  'Navy Region Northwest',
+  'Policy Engagement',
+  'Programs',
+  'Resources and Initiatives',
   'National Survey of Military-Affiliated Entrepreneurs',
   'National Survey of Military-Affiliated Entrepreneurs Toolkit - 2024',
   'Research Projects',
@@ -433,6 +452,15 @@ foreach ([
   'Volunteer Form',
   'Successful Life After Service',
   'Service Offerings',
+  'Services',
+  'Self Care',
+  'Hobbies, Sports & Games',
+  'Google AI Essentials',
+  'Employing Military Spouses – The Force Behind the Force Series',
+  'Enhancing New Mexico Veteran Services',
+  'TXServes: RGV',
+  'Thank You',
+  'Thank You!',
 ] as $title) {
   foreach ($page_refs as $page_title => $page) {
     if (stripos($page_title, $title) !== false) {
@@ -915,6 +943,7 @@ foreach ($selected_pages as $label => $source_page) {
       $selected_pages['O2O Locations'] ?? NULL,
       $selected_pages['FAQ'] ?? NULL,
       $selected_pages['Veterans for Public Office'] ?? NULL,
+      $selected_pages['Google AI Essentials'] ?? NULL,
     ]));
     if ($career_targets) {
       $tree[] = import_component_items($components, 'action-bar', [
@@ -1223,6 +1252,76 @@ foreach ($selected_pages as $label => $source_page) {
     }
   }
 
+  if (stripos($label, 'Locations') !== FALSE || stripos($label, 'Camp') !== FALSE || stripos($label, 'Fort ') !== FALSE || stripos($label, 'Joint Base') !== FALSE || stripos($label, 'Hampton Roads') !== FALSE || stripos($label, 'Navy Region') !== FALSE || stripos($label, 'TXServes') !== FALSE) {
+    $location_targets = array_values(array_filter([
+      $selected_pages['O2O Locations'] ?? NULL,
+      $selected_pages['The Onward to Opportunity Program for the Florida Military Communities'] ?? NULL,
+      $selected_pages['Camp Lejeune'] ?? NULL,
+      $selected_pages['Charleston, SC'] ?? NULL,
+      $selected_pages['Fort Campbell'] ?? NULL,
+      $selected_pages['Fort Drum'] ?? NULL,
+      $selected_pages['Fort Hood'] ?? NULL,
+      $selected_pages['Fort Knox'] ?? NULL,
+      $selected_pages['Hampton Roads'] ?? NULL,
+      $selected_pages['Joint Base Lewis-McChord'] ?? NULL,
+      $selected_pages['Navy Region Northwest'] ?? NULL,
+      $selected_pages['TXServes: RGV'] ?? NULL,
+    ]));
+    if ($location_targets) {
+      $tree[] = import_component_items($components, 'action-bar', [
+        'column_1_heading' => $location_targets[0]['h1'] ?: ($location_targets[0]['page_title'] ?? 'O2O Locations'),
+        'column_1_description' => import_excerpt($location_targets[0]['main_text'] ?? '', 120),
+        'column_1_link_text' => $location_targets[0]['page_title'] ?? 'Open page',
+        'column_1_accessible_link_text' => 'Open ' . ($location_targets[0]['page_title'] ?? 'page'),
+        'column_1_link_url' => '/canvas-import/' . import_slug($location_targets[0]['h1'] ?: $location_targets[0]['page_title'] ?: 'page-1'),
+        'column_2_heading' => $location_targets[1]['h1'] ?: ($location_targets[1]['page_title'] ?? 'Florida Military Communities'),
+        'column_2_description' => import_excerpt($location_targets[1]['main_text'] ?? '', 120),
+        'column_2_link_text' => $location_targets[1]['page_title'] ?? 'Open page',
+        'column_2_accessible_link_text' => 'Open ' . ($location_targets[1]['page_title'] ?? 'page'),
+        'column_2_link_url' => '/canvas-import/' . import_slug($location_targets[1]['h1'] ?: $location_targets[1]['page_title'] ?: 'page-2'),
+        'column_3_heading' => $location_targets[2]['h1'] ?: ($location_targets[2]['page_title'] ?? 'Camp Lejeune'),
+        'column_3_description' => import_excerpt($location_targets[2]['main_text'] ?? '', 120),
+        'column_3_link_text' => $location_targets[2]['page_title'] ?? 'Open page',
+        'column_3_accessible_link_text' => 'Open ' . ($location_targets[2]['page_title'] ?? 'page'),
+        'column_3_link_url' => '/canvas-import/' . import_slug($location_targets[2]['h1'] ?: $location_targets[2]['page_title'] ?: 'page-3'),
+      ], 'Location Cluster Action Bar', '27560000-0000-4000-8000-000000000001');
+    }
+  }
+
+  if (stripos($label, 'AmericaServes') !== FALSE || stripos($label, 'SyracuseServes') !== FALSE || stripos($label, 'Regional CoP') !== FALSE || stripos($label, 'Technical Assistance') !== FALSE || stripos($label, 'Service Offerings') !== FALSE || stripos($label, 'Veteran Services') !== FALSE) {
+    $serves_targets = array_values(array_filter([
+      $selected_pages['AmericaServes'] ?? NULL,
+      $selected_pages['AmericaServes Insights'] ?? NULL,
+      $selected_pages['AmericaServes Locations'] ?? NULL,
+      $selected_pages['SyracuseServes'] ?? NULL,
+      $selected_pages['SyracuseServes - Request Assistance'] ?? NULL,
+      $selected_pages['SyracuseServes - Veteran Resources'] ?? NULL,
+      $selected_pages['Texas Regional CoP'] ?? NULL,
+      $selected_pages['WAServes'] ?? NULL,
+      $selected_pages['SCServes'] ?? NULL,
+      $selected_pages['PAServes'] ?? NULL,
+    ]));
+    if ($serves_targets) {
+      $tree[] = import_component_items($components, 'action-bar', [
+        'column_1_heading' => $serves_targets[0]['h1'] ?: ($serves_targets[0]['page_title'] ?? 'AmericaServes'),
+        'column_1_description' => import_excerpt($serves_targets[0]['main_text'] ?? '', 120),
+        'column_1_link_text' => $serves_targets[0]['page_title'] ?? 'Open page',
+        'column_1_accessible_link_text' => 'Open ' . ($serves_targets[0]['page_title'] ?? 'page'),
+        'column_1_link_url' => '/canvas-import/' . import_slug($serves_targets[0]['h1'] ?: $serves_targets[0]['page_title'] ?: 'page-1'),
+        'column_2_heading' => $serves_targets[1]['h1'] ?: ($serves_targets[1]['page_title'] ?? 'AmericaServes Insights'),
+        'column_2_description' => import_excerpt($serves_targets[1]['main_text'] ?? '', 120),
+        'column_2_link_text' => $serves_targets[1]['page_title'] ?? 'Open page',
+        'column_2_accessible_link_text' => 'Open ' . ($serves_targets[1]['page_title'] ?? 'page'),
+        'column_2_link_url' => '/canvas-import/' . import_slug($serves_targets[1]['h1'] ?: $serves_targets[1]['page_title'] ?: 'page-2'),
+        'column_3_heading' => $serves_targets[2]['h1'] ?: ($serves_targets[2]['page_title'] ?? 'AmericaServes Locations'),
+        'column_3_description' => import_excerpt($serves_targets[2]['main_text'] ?? '', 120),
+        'column_3_link_text' => $serves_targets[2]['page_title'] ?? 'Open page',
+        'column_3_accessible_link_text' => 'Open ' . ($serves_targets[2]['page_title'] ?? 'page'),
+        'column_3_link_url' => '/canvas-import/' . import_slug($serves_targets[2]['h1'] ?: $serves_targets[2]['page_title'] ?: 'page-3'),
+      ], 'Services Action Bar', '27550000-0000-4000-8000-000000000001');
+    }
+  }
+
   if (stripos($label, 'Community') !== FALSE || stripos($label, 'News') !== FALSE || stripos($label, 'Practice') !== FALSE || stripos($label, 'Serves') !== FALSE || stripos($label, 'Technical Assistance') !== FALSE || stripos($label, 'Regional CoP') !== FALSE || stripos($label, 'Service Offerings') !== FALSE) {
     $community_targets = array_values(array_filter([
       $selected_pages['Community of Practice'] ?? NULL,
@@ -1251,6 +1350,69 @@ foreach ($selected_pages as $label => $source_page) {
         'column_3_accessible_link_text' => 'Open ' . ($community_targets[2]['page_title'] ?? 'page'),
         'column_3_link_url' => '/canvas-import/' . import_slug($community_targets[2]['h1'] ?: $community_targets[2]['page_title'] ?: 'page-3'),
       ], 'Community Action Bar', '27900000-0000-4000-8000-000000000001');
+    }
+  }
+
+  if (stripos($label, 'Scholarship') !== FALSE || stripos($label, 'Community of Practice') !== FALSE || stripos($label, 'Regional CoP') !== FALSE) {
+    $scholarship_targets = array_values(array_filter([
+      $selected_pages['Community of Practice'] ?? NULL,
+      $selected_pages['Community of Practice - Scholarships'] ?? NULL,
+      $selected_pages['Regional CoP'] ?? NULL,
+      $selected_pages['Technical Assistance'] ?? NULL,
+      $selected_pages['Community Services'] ?? NULL,
+    ]));
+    if ($scholarship_targets) {
+      $tree[] = import_component_items($components, 'action-bar', [
+        'column_1_heading' => $scholarship_targets[0]['h1'] ?: ($scholarship_targets[0]['page_title'] ?? 'Community of Practice'),
+        'column_1_description' => import_excerpt($scholarship_targets[0]['main_text'] ?? '', 120),
+        'column_1_link_text' => $scholarship_targets[0]['page_title'] ?? 'Open page',
+        'column_1_accessible_link_text' => 'Open ' . ($scholarship_targets[0]['page_title'] ?? 'page'),
+        'column_1_link_url' => '/canvas-import/' . import_slug($scholarship_targets[0]['h1'] ?: $scholarship_targets[0]['page_title'] ?: 'page-1'),
+        'column_2_heading' => $scholarship_targets[1]['h1'] ?: ($scholarship_targets[1]['page_title'] ?? 'Scholarships'),
+        'column_2_description' => import_excerpt($scholarship_targets[1]['main_text'] ?? '', 120),
+        'column_2_link_text' => $scholarship_targets[1]['page_title'] ?? 'Open page',
+        'column_2_accessible_link_text' => 'Open ' . ($scholarship_targets[1]['page_title'] ?? 'page'),
+        'column_2_link_url' => '/canvas-import/' . import_slug($scholarship_targets[1]['h1'] ?: $scholarship_targets[1]['page_title'] ?: 'page-2'),
+        'column_3_heading' => $scholarship_targets[2]['h1'] ?: ($scholarship_targets[2]['page_title'] ?? 'Regional CoP'),
+        'column_3_description' => import_excerpt($scholarship_targets[2]['main_text'] ?? '', 120),
+        'column_3_link_text' => $scholarship_targets[2]['page_title'] ?? 'Open page',
+        'column_3_accessible_link_text' => 'Open ' . ($scholarship_targets[2]['page_title'] ?? 'page'),
+        'column_3_link_url' => '/canvas-import/' . import_slug($scholarship_targets[2]['h1'] ?: $scholarship_targets[2]['page_title'] ?: 'page-3'),
+      ], 'Community Scholarship Action Bar', '27950000-0000-4000-8000-000000000001');
+    }
+  }
+
+  if (stripos($label, 'Research') !== FALSE || stripos($label, 'Applied Research') !== FALSE || stripos($label, 'Articles Archive') !== FALSE || stripos($label, 'Employment Situation') !== FALSE || str_contains($label, 'Spouse Employment')) {
+    $research_focus_targets = array_values(array_filter([
+      $selected_pages['Applied Research'] ?? NULL,
+      $selected_pages['Research & Analytics Team'] ?? NULL,
+      $selected_pages['Research Projects'] ?? NULL,
+      $selected_pages['Research Reviews'] ?? NULL,
+      $selected_pages['Articles Archive'] ?? NULL,
+      $selected_pages['The Employment Situation of Veterans'] ?? NULL,
+      $selected_pages['Reimagining Military Spouse Employment'] ?? NULL,
+      $selected_pages['Apply for the Bernard D. and Louise C. Rostker IVMF Dissertation Research Fund'] ?? NULL,
+      $selected_pages['IVMF Policy Priorities'] ?? NULL,
+      $selected_pages['Policy Engagement'] ?? NULL,
+    ]));
+    if ($research_focus_targets) {
+      $tree[] = import_component_items($components, 'action-bar', [
+        'column_1_heading' => $research_focus_targets[0]['h1'] ?: ($research_focus_targets[0]['page_title'] ?? 'Applied Research'),
+        'column_1_description' => import_excerpt($research_focus_targets[0]['main_text'] ?? '', 120),
+        'column_1_link_text' => $research_focus_targets[0]['page_title'] ?? 'Open page',
+        'column_1_accessible_link_text' => 'Open ' . ($research_focus_targets[0]['page_title'] ?? 'page'),
+        'column_1_link_url' => '/canvas-import/' . import_slug($research_focus_targets[0]['h1'] ?: $research_focus_targets[0]['page_title'] ?: 'page-1'),
+        'column_2_heading' => $research_focus_targets[1]['h1'] ?: ($research_focus_targets[1]['page_title'] ?? 'Research Team'),
+        'column_2_description' => import_excerpt($research_focus_targets[1]['main_text'] ?? '', 120),
+        'column_2_link_text' => $research_focus_targets[1]['page_title'] ?? 'Open page',
+        'column_2_accessible_link_text' => 'Open ' . ($research_focus_targets[1]['page_title'] ?? 'page'),
+        'column_2_link_url' => '/canvas-import/' . import_slug($research_focus_targets[1]['h1'] ?: $research_focus_targets[1]['page_title'] ?: 'page-2'),
+        'column_3_heading' => $research_focus_targets[2]['h1'] ?: ($research_focus_targets[2]['page_title'] ?? 'Research Projects'),
+        'column_3_description' => import_excerpt($research_focus_targets[2]['main_text'] ?? '', 120),
+        'column_3_link_text' => $research_focus_targets[2]['page_title'] ?? 'Open page',
+        'column_3_accessible_link_text' => 'Open ' . ($research_focus_targets[2]['page_title'] ?? 'page'),
+        'column_3_link_url' => '/canvas-import/' . import_slug($research_focus_targets[2]['h1'] ?: $research_focus_targets[2]['page_title'] ?: 'page-3'),
+      ], 'Research Focus Action Bar', '27770000-0000-4000-8000-000000000001');
     }
   }
 
@@ -1284,6 +1446,35 @@ foreach ($selected_pages as $label => $source_page) {
     }
   }
 
+  if (stripos($label, 'Programs') !== FALSE || stripos($label, 'Resources and Initiatives') !== FALSE) {
+    $hub_targets = array_values(array_filter([
+      $selected_pages['Programs'] ?? NULL,
+      $selected_pages['Our Programs'] ?? NULL,
+      $selected_pages['Entrepreneurship'] ?? NULL,
+      $selected_pages['Career Training'] ?? NULL,
+      $selected_pages['Research + Analytics + Policy'] ?? NULL,
+    ]));
+    if ($hub_targets) {
+      $tree[] = import_component_items($components, 'action-bar', [
+        'column_1_heading' => $hub_targets[0]['h1'] ?: ($hub_targets[0]['page_title'] ?? 'Programs'),
+        'column_1_description' => import_excerpt($hub_targets[0]['main_text'] ?? '', 120),
+        'column_1_link_text' => $hub_targets[0]['page_title'] ?? 'Open page',
+        'column_1_accessible_link_text' => 'Open ' . ($hub_targets[0]['page_title'] ?? 'page'),
+        'column_1_link_url' => '/canvas-import/' . import_slug($hub_targets[0]['h1'] ?: $hub_targets[0]['page_title'] ?: 'page-1'),
+        'column_2_heading' => $hub_targets[1]['h1'] ?: ($hub_targets[1]['page_title'] ?? 'Our Programs'),
+        'column_2_description' => import_excerpt($hub_targets[1]['main_text'] ?? '', 120),
+        'column_2_link_text' => $hub_targets[1]['page_title'] ?? 'Open page',
+        'column_2_accessible_link_text' => 'Open ' . ($hub_targets[1]['page_title'] ?? 'page'),
+        'column_2_link_url' => '/canvas-import/' . import_slug($hub_targets[1]['h1'] ?: $hub_targets[1]['page_title'] ?: 'page-2'),
+        'column_3_heading' => $hub_targets[2]['h1'] ?: ($hub_targets[2]['page_title'] ?? 'Entrepreneurship'),
+        'column_3_description' => import_excerpt($hub_targets[2]['main_text'] ?? '', 120),
+        'column_3_link_text' => $hub_targets[2]['page_title'] ?? 'Open page',
+        'column_3_accessible_link_text' => 'Open ' . ($hub_targets[2]['page_title'] ?? 'page'),
+        'column_3_link_url' => '/canvas-import/' . import_slug($hub_targets[2]['h1'] ?: $hub_targets[2]['page_title'] ?: 'page-3'),
+      ], 'Programs Hub Action Bar', '27160000-0000-4000-8000-000000000001');
+    }
+  }
+
   if (stripos($label, 'Buy Military-Owned') !== FALSE || in_array($label, ['Apparel and Accessories', 'Beer & Spirits', 'Coffee', 'Books', 'Gifts', 'Tactical, Safety & Fitness Products', 'Services', 'Self Care', 'Hobbies, Sports & Games'], TRUE)) {
     $bmo_targets = array_values(array_filter([
       $selected_pages['Buy Military-Owned Guide'] ?? NULL,
@@ -1308,6 +1499,71 @@ foreach ($selected_pages as $label => $source_page) {
         'column_3_accessible_link_text' => 'Open ' . ($bmo_targets[2]['page_title'] ?? 'page'),
         'column_3_link_url' => '/canvas-import/' . import_slug($bmo_targets[2]['h1'] ?: $bmo_targets[2]['page_title'] ?: 'page-3'),
       ], 'Buy Military-Owned Action Bar', '28250000-0000-4000-8000-000000000001');
+    }
+  }
+
+  if (stripos($label, 'Services') !== FALSE || stripos($label, 'Self Care') !== FALSE || stripos($label, 'Hobbies') !== FALSE) {
+    $service_targets = array_values(array_filter([
+      $selected_pages['Buy Military-Owned Guide'] ?? NULL,
+      $selected_pages['Services'] ?? NULL,
+      $selected_pages['Self Care'] ?? NULL,
+      $selected_pages['Hobbies, Sports & Games'] ?? NULL,
+      $selected_pages['Buy Military-Owned Product Submission'] ?? NULL,
+    ]));
+    if ($service_targets) {
+      $tree[] = import_component_items($components, 'action-bar', [
+        'column_1_heading' => $service_targets[0]['h1'] ?: ($service_targets[0]['page_title'] ?? 'Buy Military-Owned Guide'),
+        'column_1_description' => import_excerpt($service_targets[0]['main_text'] ?? '', 120),
+        'column_1_link_text' => $service_targets[0]['page_title'] ?? 'Open page',
+        'column_1_accessible_link_text' => 'Open ' . ($service_targets[0]['page_title'] ?? 'page'),
+        'column_1_link_url' => '/canvas-import/' . import_slug($service_targets[0]['h1'] ?: $service_targets[0]['page_title'] ?: 'page-1'),
+        'column_2_heading' => $service_targets[1]['h1'] ?: ($service_targets[1]['page_title'] ?? 'Services'),
+        'column_2_description' => import_excerpt($service_targets[1]['main_text'] ?? '', 120),
+        'column_2_link_text' => $service_targets[1]['page_title'] ?? 'Open page',
+        'column_2_accessible_link_text' => 'Open ' . ($service_targets[1]['page_title'] ?? 'page'),
+        'column_2_link_url' => '/canvas-import/' . import_slug($service_targets[1]['h1'] ?: $service_targets[1]['page_title'] ?: 'page-2'),
+        'column_3_heading' => $service_targets[2]['h1'] ?: ($service_targets[2]['page_title'] ?? 'Self Care'),
+        'column_3_description' => import_excerpt($service_targets[2]['main_text'] ?? '', 120),
+        'column_3_link_text' => $service_targets[2]['page_title'] ?? 'Open page',
+        'column_3_accessible_link_text' => 'Open ' . ($service_targets[2]['page_title'] ?? 'page'),
+        'column_3_link_url' => '/canvas-import/' . import_slug($service_targets[2]['h1'] ?: $service_targets[2]['page_title'] ?: 'page-3'),
+      ], 'Services Hub Action Bar', '28256000-0000-4000-8000-000000000001');
+    }
+  }
+
+  if (stripos($label, 'Shopping Guide') !== FALSE || in_array($label, ['Apparel and Accessories', 'Beer & Spirits', 'Coffee', 'Books', 'Gifts', 'Tactical, Safety & Fitness Products', 'Services', 'Self Care', 'Hobbies, Sports & Games'], TRUE)) {
+    $shopping_targets = array_values(array_filter([
+      $selected_pages['Buy Military-Owned Guide'] ?? NULL,
+      $selected_pages['Buy Military-Owned Product Submission'] ?? NULL,
+      $selected_pages['Buy Military-Owned Service Submission'] ?? NULL,
+      $selected_pages['Apparel and Accessories'] ?? NULL,
+      $selected_pages['Beer & Spirits'] ?? NULL,
+      $selected_pages['Coffee'] ?? NULL,
+      $selected_pages['Books'] ?? NULL,
+      $selected_pages['Gifts'] ?? NULL,
+      $selected_pages['Tactical, Safety & Fitness Products'] ?? NULL,
+      $selected_pages['Services'] ?? NULL,
+      $selected_pages['Self Care'] ?? NULL,
+      $selected_pages['Hobbies, Sports & Games'] ?? NULL,
+    ]));
+    if ($shopping_targets) {
+      $tree[] = import_component_items($components, 'action-bar', [
+        'column_1_heading' => $shopping_targets[0]['h1'] ?: ($shopping_targets[0]['page_title'] ?? 'Buy Military-Owned Guide'),
+        'column_1_description' => import_excerpt($shopping_targets[0]['main_text'] ?? '', 120),
+        'column_1_link_text' => $shopping_targets[0]['page_title'] ?? 'Open page',
+        'column_1_accessible_link_text' => 'Open ' . ($shopping_targets[0]['page_title'] ?? 'page'),
+        'column_1_link_url' => '/canvas-import/' . import_slug($shopping_targets[0]['h1'] ?: $shopping_targets[0]['page_title'] ?: 'page-1'),
+        'column_2_heading' => $shopping_targets[1]['h1'] ?: ($shopping_targets[1]['page_title'] ?? 'Product Submission'),
+        'column_2_description' => import_excerpt($shopping_targets[1]['main_text'] ?? '', 120),
+        'column_2_link_text' => $shopping_targets[1]['page_title'] ?? 'Open page',
+        'column_2_accessible_link_text' => 'Open ' . ($shopping_targets[1]['page_title'] ?? 'page'),
+        'column_2_link_url' => '/canvas-import/' . import_slug($shopping_targets[1]['h1'] ?: $shopping_targets[1]['page_title'] ?: 'page-2'),
+        'column_3_heading' => $shopping_targets[2]['h1'] ?: ($shopping_targets[2]['page_title'] ?? 'Service Submission'),
+        'column_3_description' => import_excerpt($shopping_targets[2]['main_text'] ?? '', 120),
+        'column_3_link_text' => $shopping_targets[2]['page_title'] ?? 'Open page',
+        'column_3_accessible_link_text' => 'Open ' . ($shopping_targets[2]['page_title'] ?? 'page'),
+        'column_3_link_url' => '/canvas-import/' . import_slug($shopping_targets[2]['h1'] ?: $shopping_targets[2]['page_title'] ?: 'page-3'),
+      ], 'Shopping Guide Action Bar', '28255000-0000-4000-8000-000000000001');
     }
   }
 
