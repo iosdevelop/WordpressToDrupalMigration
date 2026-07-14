@@ -59,6 +59,28 @@ def slug(value: Any) -> str:
     return str(value or "").strip().lower().replace(" ", "-")
 
 
+def title_from_url(url: str) -> str:
+    path = urlparse(url).path.strip("/")
+    segment = path.split("/")[-1] if path else "home"
+    words = [word for word in re.split(r"[-_]+", segment) if word]
+    return " ".join(word.upper() if word.lower() in {"ai", "cvob", "ebv", "faq", "iava", "ivmf", "nsmae", "o2o", "rei", "stem"} else word.capitalize() for word in words)
+
+
+def load_url_file(path: Path, start_row: int) -> list[SourceRow]:
+    rows: list[SourceRow] = []
+    if not path.is_file():
+        raise FileNotFoundError(f"URL file not found: {path}")
+    with path.open(encoding="utf-8") as handle:
+        for offset, line in enumerate(handle, start=0):
+            value = line.split("#", 1)[0].strip()
+            if not value:
+                continue
+            if not value.lower().startswith(("https://", "http://")):
+                raise ValueError(f"URL file contains a non-URL value: {value}")
+            rows.append(SourceRow(start_row + offset, title_from_url(value), value, "Manual URL list"))
+    return rows
+
+
 def target_url(title: str, path_segments: list[str]) -> str:
     if title.strip().lower() == "home" and not path_segments:
         return "https://ivmf.syracuse.edu/"
@@ -430,9 +452,20 @@ def main() -> int:
     parser.add_argument("--timeout", type=int, default=30)
     parser.add_argument("--max-pages", type=int)
     parser.add_argument("--skip-bios", action="store_true")
+    parser.add_argument(
+        "--url-file",
+        type=Path,
+        action="append",
+        default=[],
+        help="Optional newline-delimited URL manifest to append to the workbook source rows.",
+    )
     args = parser.parse_args()
 
     sources, targets, manual_targets = load_workbook_rows(args.workbook)
+    for url_file in args.url_file:
+        existing_urls = {source.url for source in sources}
+        extra_sources = [source for source in load_url_file(url_file, len(sources) + 1) if source.url not in existing_urls]
+        sources.extend(extra_sources)
     unique_urls = list(dict.fromkeys(source.url for source in sources))
     if args.max_pages is not None:
         allowed = set(unique_urls[: args.max_pages])

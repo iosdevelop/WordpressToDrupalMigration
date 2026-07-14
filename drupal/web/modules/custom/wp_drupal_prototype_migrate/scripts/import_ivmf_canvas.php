@@ -23,6 +23,11 @@ $output_dir = import_first_existing_dir([
 $pages_file = $output_dir . '/ivmf-content-pages.jsonl';
 $people_file = $output_dir . '/ivmf-people.csv';
 $testimonials_file = $output_dir . '/ivmf-testimonials-deduplicated.csv';
+$research_briefs_file = import_first_existing_dir([
+  dirname(__DIR__, 6) . '/data',
+  dirname(__DIR__) . '/data',
+  '/var/www/data',
+]) . '/research-brief-urls.txt';
 
 if (!is_file($pages_file)) {
   throw new RuntimeException("Missing crawl output: {$pages_file}");
@@ -52,6 +57,21 @@ function import_alias_from_url(string $url): string {
   }
   $segments = array_map(static fn(string $segment): string => import_slug($segment), $segments);
   return '/canvas-import/' . implode('/', $segments);
+}
+
+function import_normalize_url(string $url): string {
+  $url = trim($url);
+  if ($url === '') {
+    return '';
+  }
+  $parts = parse_url($url);
+  $scheme = strtolower((string) ($parts['scheme'] ?? 'https'));
+  $host = strtolower((string) ($parts['host'] ?? ''));
+  $path = '/' . trim((string) ($parts['path'] ?? '/'), '/');
+  if ($path !== '/') {
+    $path .= '/';
+  }
+  return $scheme . '://' . $host . $path;
 }
 
 function import_excerpt(string $text, int $length = 260): string {
@@ -219,6 +239,20 @@ function import_load_testimonials(string $path): array {
   return $rows;
 }
 
+function import_load_url_manifest(string $path): array {
+  if (!is_file($path)) {
+    return [];
+  }
+  $urls = [];
+  foreach (file($path, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) as $line) {
+    $url = trim(preg_replace('/#.*/', '', $line) ?? '');
+    if ($url !== '') {
+      $urls[] = import_normalize_url($url);
+    }
+  }
+  return array_values(array_unique($urls));
+}
+
 function import_component_items(array $components, string $short_id, array $inputs, string $label, string $uuid, ?string $parent_uuid = NULL, ?string $slot = NULL): array {
   if (!isset($components[$short_id])) {
     $components[$short_id] = import_load_component($short_id);
@@ -308,10 +342,23 @@ $components = import_load_components([
 $content_pages = import_load_jsonl($pages_file);
 $people = import_load_people($people_file);
 $testimonials = import_load_testimonials($testimonials_file);
+$research_brief_urls = import_load_url_manifest($research_briefs_file);
 
 $page_refs = [];
+$page_refs_by_url = [];
 foreach ($content_pages as $source_url => $page) {
   $page_refs[$page['page_title'] ?? $source_url] = $page;
+  foreach ([
+    $source_url,
+    $page['source_url'] ?? '',
+    $page['final_url'] ?? '',
+    $page['canonical_url'] ?? '',
+  ] as $url) {
+    $normalized_url = import_normalize_url((string) $url);
+    if ($normalized_url !== '') {
+      $page_refs_by_url[$normalized_url] = $page;
+    }
+  }
 }
 
 $selected_pages = [];
@@ -471,6 +518,19 @@ foreach ([
     break;
   }
 }
+}
+
+foreach ($research_brief_urls as $url) {
+  $page = $page_refs_by_url[$url] ?? NULL;
+  if (!$page) {
+    continue;
+  }
+  $label = $page['h1'] ?: ($page['page_title'] ?? basename(trim((string) parse_url($url, PHP_URL_PATH), '/')));
+  $label = import_clean_text((string) preg_replace('/\s*-\s*D.?Aniello Institute.*$/i', '', $label));
+  if (isset($selected_pages[$label])) {
+    $label .= ' (' . basename(trim((string) parse_url($url, PHP_URL_PATH), '/')) . ')';
+  }
+  $selected_pages[$label] = $page;
 }
 
 $showcase_source = $selected_pages['About IVMF'] ?? reset($content_pages);

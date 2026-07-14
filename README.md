@@ -215,6 +215,15 @@ content from its WordPress URL inventory with:
   scripts/extract_ivmf_content.py
 ```
 
+To append the Research Brief article manifest used by the Canvas prototype:
+
+```bash
+/home/mozart/.venvs/ivmf-workbook/bin/python \
+  scripts/extract_ivmf_content.py \
+  --url-file data/research-brief-urls.txt \
+  --output-dir drupal/web/modules/custom/wp_drupal_prototype_migrate/data/crawl-output
+```
+
 The ignored local `data/crawl-output/` directory receives page summaries,
 full main-content HTML/text, image references, testimonial instances, a
 deduplicated testimonial repository, and People directory/profile data. Target
