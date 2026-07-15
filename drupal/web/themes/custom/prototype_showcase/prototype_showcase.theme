@@ -13,27 +13,90 @@ use Drupal\Core\Url;
  * Implements hook_preprocess_page().
  */
 function prototype_showcase_preprocess_page(array &$variables): void {
-  $variables['prototype_showcase_nav_links'] = [
+  $nav_links = [
+    [
+      'title' => t('About'),
+      'url' => '/canvas-import/about',
+      'children' => [
+        ['title' => t('Who We Are'), 'url' => '/canvas-import/about-ivmf'],
+        ['title' => t('Impact'), 'url' => '/canvas-import/about-ivmf/impact'],
+        ['title' => t('Team'), 'url' => '/canvas-import/about-ivmf/team'],
+        ['title' => t('Careers'), 'url' => '/canvas-import/about/careers'],
+        ['title' => t('Partners & Funders'), 'url' => '/canvas-import/about-ivmf/partners-funders'],
+        ['title' => t('Bunker Labs Legacy'), 'url' => '/canvas-import/bunker-labs-a-legacy-of-impact'],
+        ['title' => t('Why SU?'), 'url' => '/canvas-import/about-ivmf/connection-with-su'],
+        ['title' => t('NVRC'), 'url' => '/canvas-import/about/nvrc'],
+      ],
+    ],
+    [
+      'title' => t('Programs'),
+      'url' => '/canvas-import/programs',
+      'children' => [
+        ['title' => t('O2O'), 'url' => '/canvas-import/programs/career-training'],
+        ['title' => t('VPO'), 'url' => '/canvas-import/vpo'],
+        ['title' => t('Entrepreneurship'), 'url' => '/canvas-import/programs/entrepreneurship'],
+        ['title' => t('All Programs'), 'url' => '/canvas-import/our-programs'],
+      ],
+    ],
+    [
+      'title' => t('Research'),
+      'url' => '/canvas-import/research',
+      'children' => [
+        ['title' => t('Evaluation'), 'url' => '/canvas-import/research-analytics/evaluation-analytics'],
+        ['title' => t('Applied Research'), 'url' => '/canvas-import/research-analytics/applied-research'],
+        ['title' => t('Community Insights and Impact'), 'url' => '/canvas-import/programs/community-services/americaserves/insights'],
+        ['title' => t('Publications'), 'url' => '/canvas-import/article'],
+      ],
+    ],
+    [
+      'title' => t('Policy'),
+      'url' => '/canvas-import/policy',
+      'children' => [
+        ['title' => t('Policy Priorities'), 'url' => '/canvas-import/ivmf-policy-priorities'],
+        ['title' => t('Testimonials'), 'url' => '/canvas-import/testimonials'],
+      ],
+    ],
+    [
+      'title' => t('News'),
+      'url' => '/canvas-import/news',
+      'children' => [],
+    ],
+  ];
+
+  $current_path = \Drupal::request()->getPathInfo();
+  $breadcrumb = [
     [
       'title' => t('Home'),
       'url' => Url::fromRoute('<front>')->toString(),
     ],
-    [
-      'title' => t('About'),
-      'url' => '/prototype/about-company-overview',
-    ],
-    [
-      'title' => t('Services'),
-      'url' => '/prototype/service-strategy-workshop',
-    ],
-    [
-      'title' => t('Resources'),
-      'url' => '/prototype/resource-guide-redirect-strategy',
-    ],
-    [
-      'title' => t('Contact'),
-      'url' => '/prototype/contact-sales',
-    ],
   ];
-}
 
+  foreach ($nav_links as &$item) {
+    $item['active'] = $current_path === $item['url'];
+    foreach ($item['children'] as &$child) {
+      $child['active'] = $current_path === $child['url'] || str_starts_with($current_path, $child['url'] . '/');
+      if ($child['active']) {
+        $item['active'] = TRUE;
+        $breadcrumb[] = ['title' => $item['title'], 'url' => $item['url']];
+        $breadcrumb[] = ['title' => $child['title'], 'url' => $child['url']];
+      }
+    }
+    unset($child);
+    if ($current_path === $item['url']) {
+      $breadcrumb[] = ['title' => $item['title'], 'url' => $item['url']];
+    }
+  }
+  unset($item);
+
+  $route_page = \Drupal::routeMatch()->getParameter('canvas_page');
+  if ($route_page && count($breadcrumb) > 1) {
+    $route_title = preg_replace('/^IVMF Imported:\s*/', '', $route_page->label());
+    $last_title = (string) end($breadcrumb)['title'];
+    if ($route_title && $route_title !== $last_title) {
+      $breadcrumb[] = ['title' => $route_title, 'url' => ''];
+    }
+  }
+
+  $variables['prototype_showcase_nav_links'] = $nav_links;
+  $variables['prototype_showcase_breadcrumb'] = $breadcrumb;
+}

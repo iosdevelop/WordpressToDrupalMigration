@@ -42,6 +42,19 @@ function import_clean_text(string $value): string {
   return trim((string) preg_replace('/\s+/u', ' ', html_entity_decode($value, ENT_QUOTES | ENT_HTML5, 'UTF-8')));
 }
 
+function import_clean_page_title(string $value): string {
+  return import_clean_text((string) preg_replace('/\s*-\s*D.?Aniello Institute.*$/i', '', $value));
+}
+
+function import_page_display_title(array $page, string $fallback): string {
+  $h1 = import_clean_text((string) ($page['h1'] ?? ''));
+  if ($h1 !== '' && stripos($h1, "D'Aniello Institute for Veterans and Military Families") === FALSE) {
+    return $h1;
+  }
+  $page_title = import_clean_page_title((string) ($page['page_title'] ?? ''));
+  return $page_title !== '' ? $page_title : $fallback;
+}
+
 function import_slug(string $value): string {
   $value = iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $value) ?: $value;
   $value = strtolower($value);
@@ -300,17 +313,37 @@ function import_upsert_canvas_page(string $title, string $alias, string $descrip
   $storage = \Drupal::entityTypeManager()->getStorage('canvas_page');
   $ids = $storage->getQuery()
     ->accessCheck(FALSE)
-    ->condition('title', $title)
     ->execute();
 
   /** @var \Drupal\canvas\Entity\Page $page */
-  $page = $ids ? $storage->load(reset($ids)) : Page::create([
-    'title' => $title,
-    'owner' => 1,
-    'status' => 1,
-    'path' => ['alias' => $alias],
-  ]);
+  $page = NULL;
+  foreach ($storage->loadMultiple($ids) as $candidate) {
+    $path_item = $candidate->get('path')->first();
+    $candidate_alias = is_object($path_item) && method_exists($path_item, 'getValue') ? (string) (($path_item->getValue()['alias'] ?? '') ?: '') : '';
+    if ($candidate_alias === $alias) {
+      $page = $candidate;
+      break;
+    }
+  }
+  if (!$page) {
+    foreach ($storage->loadMultiple($ids) as $candidate) {
+      if ($candidate->label() === $title) {
+        $page = $candidate;
+        break;
+      }
+    }
+  }
+  if (!$page) {
+    $page = Page::create([
+      'title' => $title,
+      'owner' => 1,
+      'status' => 1,
+      'path' => ['alias' => $alias],
+    ]);
+  }
   $page->set('description', $description);
+  $page->set('title', $title);
+  $page->set('path', ['alias' => $alias]);
   $page->set('components', $components_tree);
   $violations = $page->validate();
   if ($violations->count()) {
@@ -322,6 +355,64 @@ function import_upsert_canvas_page(string $title, string $alias, string $descrip
   }
   $page->save();
   return $page;
+}
+
+function import_page_from_url(array $page_refs_by_url, string $url): ?array {
+  return $page_refs_by_url[import_normalize_url($url)] ?? NULL;
+}
+
+function import_create_ia_landing_page(array $components, array $section, int $section_index): void {
+  $tree = [];
+  $base = 61000000 + $section_index;
+  $tree[] = import_component_items($components, 'hero', [
+    'eyebrow' => 'IVMF Navigation',
+    'heading' => $section['title'],
+    'body' => $section['description'],
+    'link_text' => $section['children'][0]['title'] ?? 'Explore',
+    'link_url' => $section['children'][0]['url'] ?? $section['alias'],
+  ], 'IA Hero', sprintf('%08d-0000-4000-8000-000000000001', $base));
+
+  if (!empty($section['children'])) {
+    $layout_uuid = sprintf('%08d-0000-4000-8000-000000000002', $base);
+    $tree[] = import_component_items($components, 'layout-container', [
+      'heading' => $section['card_heading'] ?? 'Explore this section',
+      'columns' => count($section['children']) === 2 ? 2 : 3,
+    ], 'IA Links', $layout_uuid);
+    foreach ($section['children'] as $child_index => $child) {
+      $tree[] = import_component_items($components, 'card', [
+        'number' => sprintf('%02d', $child_index + 1),
+        'heading' => $child['title'],
+        'content' => $child['description'] ?? 'Open the migrated Canvas prototype page for this section.',
+        'link_text' => 'Open ' . $child['title'],
+        'link_url' => $child['url'],
+      ], 'IA Link ' . ($child_index + 1), sprintf('%08d-0000-4000-8000-%012d', $base, $child_index + 3), $layout_uuid, 'content');
+    }
+  }
+
+  import_upsert_canvas_page(
+    $section['page_title'],
+    $section['alias'],
+    $section['description'],
+    $tree
+  );
+}
+
+function import_create_placeholder_page(array $components, string $title, string $alias, string $parent_title): void {
+  $seed = abs(crc32($alias)) % 100000000;
+  $tree = [];
+  $tree[] = import_component_items($components, 'hero', [
+    'eyebrow' => $parent_title,
+    'heading' => $title,
+    'body' => 'Prototype placeholder for the proposed IVMF navigation. This page is wired into the menu so Syracuse can validate the IA while source content is confirmed.',
+    'link_text' => 'Back to ' . $parent_title,
+    'link_url' => '/canvas-import/' . import_slug($parent_title),
+  ], 'Placeholder Hero', sprintf('%08d-0000-4000-8000-000000000001', $seed));
+  $tree[] = import_component_items($components, 'text-content', [
+    'heading' => 'Content needed',
+    'content' => 'This destination is present in the requested navigation but does not currently exist in the crawled WordPress inventory. It should be filled from the authoritative Syracuse source before production migration.',
+  ], 'Placeholder Body', sprintf('%08d-0000-4000-8000-000000000002', $seed));
+
+  import_upsert_canvas_page('IVMF IA: ' . $title, $alias, 'Prototype placeholder page for ' . $title . '.', $tree);
 }
 
 $components = import_load_components([
@@ -525,13 +616,92 @@ foreach ($research_brief_urls as $url) {
   if (!$page) {
     continue;
   }
-  $label = $page['h1'] ?: ($page['page_title'] ?? basename(trim((string) parse_url($url, PHP_URL_PATH), '/')));
-  $label = import_clean_text((string) preg_replace('/\s*-\s*D.?Aniello Institute.*$/i', '', $label));
+  $label = import_page_display_title($page, basename(trim((string) parse_url($url, PHP_URL_PATH), '/')));
   if (isset($selected_pages[$label])) {
     $label .= ' (' . basename(trim((string) parse_url($url, PHP_URL_PATH), '/')) . ')';
   }
   $selected_pages[$label] = $page;
 }
+
+$exact_menu_pages = [
+  'Impact' => 'https://ivmf.syracuse.edu/about-ivmf/impact/',
+  'Policy Engagement' => 'https://ivmf.syracuse.edu/research-analytics/policy-engagement/',
+  'Evaluation & Analytics' => 'https://ivmf.syracuse.edu/research-analytics/evaluation-analytics/',
+  'AmericaServes Insights' => 'https://ivmf.syracuse.edu/programs/community-services/americaserves/insights/',
+];
+foreach ($exact_menu_pages as $label => $url) {
+  $page = import_page_from_url($page_refs_by_url, $url);
+  if ($page) {
+    $selected_pages[$label] = $page;
+  }
+}
+
+$ia_sections = [
+  [
+    'title' => 'About',
+    'page_title' => 'IVMF IA: About',
+    'alias' => '/canvas-import/about',
+    'description' => 'Who IVMF is, why the work matters, and the people and partners behind the mission.',
+    'card_heading' => 'About IVMF',
+    'children' => [
+      ['title' => 'Who We Are', 'url' => '/canvas-import/about-ivmf', 'description' => 'Mission, identity, and institutional overview.'],
+      ['title' => 'Impact', 'url' => '/canvas-import/about-ivmf/impact', 'description' => 'Evidence of outcomes and reach across the military-connected community.'],
+      ['title' => 'Team', 'url' => '/canvas-import/about-ivmf/team', 'description' => 'Leadership, staff, and people profiles.'],
+      ['title' => 'Careers', 'url' => '/canvas-import/about/careers', 'description' => 'Placeholder for future hiring and employment content.'],
+      ['title' => 'Partners & Funders', 'url' => '/canvas-import/about-ivmf/partners-funders', 'description' => 'Organizations that support and fund IVMF work.'],
+      ['title' => 'Bunker Labs Legacy', 'url' => '/canvas-import/bunker-labs-a-legacy-of-impact', 'description' => 'Legacy and impact of Bunker Labs.'],
+      ['title' => 'Why SU?', 'url' => '/canvas-import/about-ivmf/connection-with-su', 'description' => 'Connection to Syracuse University.'],
+      ['title' => 'NVRC', 'url' => '/canvas-import/about/nvrc', 'description' => 'Placeholder for future NVRC destination content.'],
+    ],
+  ],
+  [
+    'title' => 'Programs',
+    'page_title' => 'IVMF Imported: Programs',
+    'alias' => '/canvas-import/programs',
+    'description' => 'Program pathways for career training, public leadership, entrepreneurship, and support.',
+    'card_heading' => 'Program pathways',
+    'children' => [
+      ['title' => 'O2O', 'url' => '/canvas-import/programs/career-training', 'description' => 'Career training and certification support.'],
+      ['title' => 'VPO', 'url' => '/canvas-import/vpo', 'description' => 'Veterans Program for Public Office.'],
+      ['title' => 'Entrepreneurship', 'url' => '/canvas-import/programs/entrepreneurship', 'description' => 'Entrepreneurship training and growth programs.'],
+      ['title' => 'All Programs', 'url' => '/canvas-import/our-programs', 'description' => 'Browse all IVMF program offerings.'],
+    ],
+  ],
+  [
+    'title' => 'Research',
+    'page_title' => 'IVMF IA: Research',
+    'alias' => '/canvas-import/research',
+    'description' => 'Evaluation, applied research, community insights, and publications.',
+    'card_heading' => 'Research areas',
+    'children' => [
+      ['title' => 'Evaluation', 'url' => '/canvas-import/research-analytics/evaluation-analytics', 'description' => 'Evaluation and analytics work.'],
+      ['title' => 'Applied Research', 'url' => '/canvas-import/research-analytics/applied-research', 'description' => 'Research projects and applied studies.'],
+      ['title' => 'Community Insights and Impact', 'url' => '/canvas-import/programs/community-services/americaserves/insights', 'description' => 'Community-facing insights and service impact.'],
+      ['title' => 'Publications', 'url' => '/canvas-import/article', 'description' => 'Research briefs, reports, and article archive.'],
+    ],
+  ],
+  [
+    'title' => 'Policy',
+    'page_title' => 'IVMF IA: Policy',
+    'alias' => '/canvas-import/policy',
+    'description' => 'Policy priorities, engagement, and proof points from the IVMF community.',
+    'card_heading' => 'Policy resources',
+    'children' => [
+      ['title' => 'Policy Priorities', 'url' => '/canvas-import/ivmf-policy-priorities', 'description' => 'Priority policy areas and recommendations.'],
+      ['title' => 'Testimonials', 'url' => '/canvas-import/testimonials', 'description' => 'Deduplicated testimonial repository from the migration crawl.'],
+    ],
+  ],
+  [
+    'title' => 'News',
+    'page_title' => 'IVMF IA: News',
+    'alias' => '/canvas-import/news',
+    'description' => 'News and updates from the IVMF prototype content inventory.',
+    'card_heading' => 'Latest channels',
+    'children' => [
+      ['title' => 'Community News', 'url' => '/canvas-import/programs/community-services/community-news', 'description' => 'Community news content imported from the WordPress inventory.'],
+    ],
+  ],
+];
 
 $showcase_source = $selected_pages['About IVMF'] ?? reset($content_pages);
 $showcase_images = $showcase_source['images'] ?? [];
@@ -748,11 +918,18 @@ import_upsert_canvas_page(
   $showcase_tree
 );
 
+foreach ($ia_sections as $section_index => $section) {
+  import_create_ia_landing_page($components, $section, $section_index + 1);
+}
+import_create_placeholder_page($components, 'Careers', '/canvas-import/about/careers', 'About');
+import_create_placeholder_page($components, 'NVRC', '/canvas-import/about/nvrc', 'About');
+
 foreach ($selected_pages as $label => $source_page) {
+  $page_title = import_page_display_title($source_page, $label);
   $tree = [];
   $tree[] = import_component_items($components, 'hero', [
     'eyebrow' => 'Imported Page',
-    'heading' => $source_page['h1'] ?: $source_page['page_title'] ?: $label,
+    'heading' => $page_title,
     'body' => import_excerpt($source_page['meta_description'] ?: ($source_page['main_text'] ?? '')),
     'link_text' => 'Open source',
     'link_url' => $source_page['final_url'] ?: $source_page['source_url'],
@@ -1699,7 +1876,7 @@ foreach ($selected_pages as $label => $source_page) {
   }
 
   import_upsert_canvas_page(
-    'IVMF Imported: ' . ($source_page['h1'] ?: $source_page['page_title'] ?: $label),
+    'IVMF Imported: ' . $page_title,
     import_alias_from_url($source_page['final_url'] ?: $source_page['source_url']),
     import_excerpt($source_page['meta_description'] ?: ($source_page['main_text'] ?? ''), 240),
     $tree

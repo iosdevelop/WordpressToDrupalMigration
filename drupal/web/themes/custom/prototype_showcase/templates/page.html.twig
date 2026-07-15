@@ -15,7 +15,16 @@
       <nav class="ps-nav" aria-label="Primary menu">
         <ul class="ps-nav-list">
           {% for item in prototype_showcase_nav_links %}
-            <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+            <li class="ps-nav-item{% if item.active %} is-active{% endif %}">
+              <a href="{{ item.url }}">{{ item.title }}</a>
+              {% if item.children %}
+                <ul class="ps-nav-submenu" aria-label="{{ item.title }} submenu">
+                  {% for child in item.children %}
+                    <li><a class="{% if child.active %}is-active{% endif %}" href="{{ child.url }}">{{ child.title }}</a></li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </li>
           {% endfor %}
         </ul>
       </nav>
@@ -23,6 +32,24 @@
   </header>
 
   <main class="ps-main">
+    {% if prototype_showcase_breadcrumb|length > 1 %}
+      <section class="ps-breadcrumb-shell ps-canvas-section">
+        <nav class="ps-breadcrumb" aria-label="Breadcrumb">
+          <ol>
+            {% for item in prototype_showcase_breadcrumb %}
+              <li>
+                {% if item.url and not loop.last %}
+                  <a href="{{ item.url }}">{{ item.title }}</a>
+                {% else %}
+                  <span>{{ item.title }}</span>
+                {% endif %}
+              </li>
+            {% endfor %}
+          </ol>
+        </nav>
+      </section>
+    {% endif %}
+
     {% if is_front %}
       <section class="ps-hero ps-canvas-section" aria-labelledby="canvas-demo-title">
         <div class="ps-hero-copy">

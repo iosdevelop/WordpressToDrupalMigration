@@ -74,11 +74,10 @@ a:focus {
   position: sticky;
   top: 1rem;
   z-index: 5;
-  border: 1px solid rgba(56, 245, 179, 0.2);
-  border-radius: 999px;
-  backdrop-filter: blur(10px);
-  background: rgba(13, 17, 23, 0.74);
-  box-shadow: var(--ps-shadow);
+  border: 1px solid rgba(13, 17, 23, 0.12);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
 }
 
 .ps-header-inner {
@@ -93,7 +92,7 @@ a:focus {
   display: inline-flex;
   align-items: center;
   gap: 0.7rem;
-  color: var(--ps-ink);
+  color: #111827;
   font-weight: 700;
   letter-spacing: 0.01em;
   text-decoration: none;
@@ -112,8 +111,7 @@ a:focus {
 }
 
 .ps-nav .menu,
-.ps-nav-list,
-.ps-nav ul {
+.ps-nav-list {
   margin: 0;
   padding: 0;
   list-style: none;
@@ -122,23 +120,107 @@ a:focus {
   gap: 0.6rem;
 }
 
+.ps-nav-item {
+  position: relative;
+}
+
 .ps-nav a {
   display: inline-block;
-  padding: 0.25rem 0.6rem;
+  padding: 0.38rem 0.65rem;
   border-radius: 8px;
-  color: var(--ps-ink);
+  color: #111827;
   text-decoration: none;
 }
 
-.ps-nav .is-active,
-.ps-nav-list .is-active,
+.ps-nav-item.is-active > a,
+.ps-nav-submenu a.is-active,
 .ps-nav-list a[aria-current="page"] {
-  background: rgba(35, 169, 255, 0.2);
+  background: rgba(35, 169, 255, 0.14);
 }
 
 .ps-nav a:hover,
 .ps-nav a:focus {
-  background: rgba(56, 245, 179, 0.12);
+  background: rgba(17, 24, 39, 0.08);
+  color: #000;
+}
+
+.ps-nav-submenu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 20;
+  display: none;
+  min-width: 15rem;
+  margin: 0;
+  padding: 0.45rem;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  border-radius: 8px;
+  list-style: none;
+  background: #fff;
+  box-shadow: 0 18px 36px rgba(0, 0, 0, 0.2);
+}
+
+.ps-nav-submenu::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: 0.45rem;
+}
+
+.ps-nav-item:hover .ps-nav-submenu,
+.ps-nav-item:focus-within .ps-nav-submenu {
+  display: block;
+}
+
+.ps-nav-submenu li + li {
+  margin-top: 0.2rem;
+}
+
+.ps-nav-submenu a {
+  display: block;
+  white-space: nowrap;
+  color: #111827;
+}
+
+.ps-breadcrumb {
+  margin: 0;
+  color: #4b5563;
+  font-size: 0.88rem;
+}
+
+.ps-breadcrumb-shell {
+  margin-bottom: 1rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid rgba(17, 24, 39, 0.1);
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.ps-breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ps-breadcrumb li:not(:last-child)::after {
+  content: "/";
+  margin-left: 0.35rem;
+  color: #9ca3af;
+}
+
+.ps-breadcrumb a {
+  color: #111827;
+  text-decoration-color: rgba(17, 24, 39, 0.3);
+}
+
+.ps-breadcrumb span {
+  color: #6b7280;
 }
 
 .ps-main {
