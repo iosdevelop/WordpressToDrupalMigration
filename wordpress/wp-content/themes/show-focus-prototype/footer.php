@@ -11,8 +11,7 @@ if (!defined('ABSPATH')) {
 ?>
     <footer class="site-footer animate-up delay-3">
         <p>
-            Demo-first WordPress theme for migration storytelling.
-            Powered by <?php bloginfo('name'); ?>.
+            WordPress source experience aligned with the Drupal Canvas migration target.
         </p>
     </footer>
 </div>

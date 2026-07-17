@@ -36,6 +36,17 @@ function show_focus_enqueue_assets(): void
         ['show-focus-fonts'],
         wp_get_theme()->get('Version')
     );
+
+    if (is_front_page()) {
+        $canvas_stylesheet = get_stylesheet_directory() . '/canvas-front-page.css';
+
+        wp_enqueue_style(
+            'show-focus-canvas-front-page',
+            get_stylesheet_directory_uri() . '/canvas-front-page.css',
+            ['show-focus-style'],
+            (string) filemtime($canvas_stylesheet)
+        );
+    }
 }
 add_action('wp_enqueue_scripts', 'show_focus_enqueue_assets');
 
@@ -44,9 +55,10 @@ function show_focus_nav_fallback(): void
     $default_links = [
         '/' => __('Home', 'show-focus-prototype'),
         '/about-company-overview/' => __('About', 'show-focus-prototype'),
-        '/service-strategy-workshop/' => __('Services', 'show-focus-prototype'),
-        '/resource-guide-redirect-strategy/' => __('Resources', 'show-focus-prototype'),
-        '/contact-sales/' => __('Contact', 'show-focus-prototype'),
+        '/service-strategy-workshop/' => __('Programs', 'show-focus-prototype'),
+        '/resource-guide-redirect-strategy/' => __('Research', 'show-focus-prototype'),
+        '/legal-privacy-policy/' => __('Policy', 'show-focus-prototype'),
+        '/resource-case-study-bank/' => __('News', 'show-focus-prototype'),
     ];
 
     echo '<ul class="site-nav">';
