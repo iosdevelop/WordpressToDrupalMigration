@@ -1,0 +1,22 @@
+<section class="ps-deadlines ps-deadlines--{{ theme|default('light') }} ps-canvas-section">
+  {% if container_heading or container_text %}
+    <header class="ps-deadlines-header">
+      {% if container_heading %}<h2>{{ container_heading }}</h2>{% endif %}
+      {% if container_text %}<p>{{ container_text }}</p>{% endif %}
+    </header>
+  {% endif %}
+  <div class="ps-deadlines-list">
+    {% for i in [1, 2, 3] %}
+      {% set label = attribute(_context, 'label_' ~ i) %}
+      {% set deadline = attribute(_context, 'deadline_' ~ i) %}
+      {% set text = attribute(_context, 'text_' ~ i) %}
+      {% if label or deadline or text %}
+        <article class="ps-deadline">
+          {% if label %}<p class="ps-deadline-label">{{ label }}</p>{% endif %}
+          {% if deadline %}<h3>{{ deadline }}</h3>{% endif %}
+          {% if text %}<p>{{ text }}</p>{% endif %}
+        </article>
+      {% endif %}
+    {% endfor %}
+  </div>
+</section>

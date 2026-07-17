@@ -1,0 +1,51 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: IVMF Deadlines
+description: Three-item deadline section aligned with the July 2026 Canvas export.
+props:
+  type: object
+  required:
+    - theme
+  properties:
+    container_heading:
+      type: string
+      title: Container Heading
+      examples: ['Upcoming deadlines']
+    container_text:
+      type: string
+      title: Container Text
+      examples: ['Important dates for this program.']
+    theme:
+      type: string
+      title: Theme
+      enum: [light, dark]
+      default: light
+      examples: [light]
+    label_1:
+      type: string
+      title: Deadline 1 Label
+      examples: ['Application deadline']
+    deadline_1:
+      type: string
+      title: Deadline 1 Date
+      examples: ['July 1']
+    text_1:
+      type: string
+      title: Deadline 1 Text
+    label_2:
+      type: string
+      title: Deadline 2 Label
+    deadline_2:
+      type: string
+      title: Deadline 2 Date
+    text_2:
+      type: string
+      title: Deadline 2 Text
+    label_3:
+      type: string
+      title: Deadline 3 Label
+    deadline_3:
+      type: string
+      title: Deadline 3 Date
+    text_3:
+      type: string
+      title: Deadline 3 Text

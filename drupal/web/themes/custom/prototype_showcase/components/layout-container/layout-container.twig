@@ -1,4 +1,4 @@
-<section class="ps-canvas-section">
+<section class="ps-canvas-section ps-layout-container{% if full_dark %} ps-layout-container--dark{% endif %}">
   {% if heading %}<div class="ps-section-heading"><h2>{{ heading }}</h2></div>{% endif %}
   <div class="ps-card-grid ps-columns-{{ columns|default(3) }}">{% block content %}{% endblock %}</div>
 </section>

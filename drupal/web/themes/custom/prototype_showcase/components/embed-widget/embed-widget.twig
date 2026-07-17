@@ -1,0 +1,11 @@
+<section class="ps-embed-widget ps-canvas-section">
+  {% if heading %}<h2>{{ heading }}</h2>{% endif %}
+  {% if text %}<p>{{ text }}</p>{% endif %}
+  {% if widget_code %}
+    <div class="ps-embed-widget-placeholder" role="note">
+      <strong>Embed preview disabled in the local prototype</strong>
+      <p>The code is retained as editor input but is escaped and never executed.</p>
+      <pre><code>{{ widget_code }}</code></pre>
+    </div>
+  {% endif %}
+</section>

@@ -1,0 +1,49 @@
+$schema: https://git.drupalcode.org/project/drupal/-/raw/11.x/core/assets/schemas/v1/metadata.schema.json
+name: IVMF CTA Bar
+description: Three-link call-to-action bar aligned with the July 2026 Canvas export.
+props:
+  type: object
+  required:
+    - link_text_1
+    - link_url_1
+    - link_text_2
+    - link_url_2
+    - link_text_3
+    - link_url_3
+  properties:
+    link_text_1:
+      type: string
+      title: Link 1 Text
+      examples: ['Link One']
+    accessible_link_text_1:
+      type: string
+      title: Link 1 Accessible Text
+    link_url_1:
+      type: string
+      format: uri-reference
+      title: Link 1 URL
+      examples: ['/canvas-layout-demo']
+    link_text_2:
+      type: string
+      title: Link 2 Text
+      examples: ['Link Two']
+    accessible_link_text_2:
+      type: string
+      title: Link 2 Accessible Text
+    link_url_2:
+      type: string
+      format: uri-reference
+      title: Link 2 URL
+      examples: ['/canvas-layout-demo']
+    link_text_3:
+      type: string
+      title: Link 3 Text
+      examples: ['Link Three']
+    accessible_link_text_3:
+      type: string
+      title: Link 3 Accessible Text
+    link_url_3:
+      type: string
+      format: uri-reference
+      title: Link 3 URL
+      examples: ['/canvas-layout-demo']

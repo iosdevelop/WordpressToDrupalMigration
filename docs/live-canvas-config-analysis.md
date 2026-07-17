@@ -4,19 +4,21 @@ Sources:
 
 - `data/config-ivmf-sites-syr-edu-2026-06-11-14-57.tar.gz` (exported June 11, 2026)
 - `data/config-ivmf-sites-syr-edu-2026-06-22-15-54.tar.gz` (exported June 22, 2026)
+- `data/config-ivmf-sites-syr-edu-2026-07-17-14-31.tar.gz` (exported July 17, 2026)
 
-The June 22 export is the current architecture reference. Compared with June
-11, it adds three reusable basic-block component records (Blue Bar Header,
-Secondary Navigation, and Universal Footer), separates reusable content blocks
-from inline blocks in Canvas folders, and enables two additional
-environment-specific modules. The referenced reusable block content is not
-included in a configuration export.
+The July 17 export is the current architecture reference. Compared with June
+22, it adds CTA Bar, Deadlines, and Embed Widget SDC records; retires the
+generic inline basic-block component; adds a dedicated Content block folder;
+and updates Layout Container and Text Content with dark-mode options. It also
+enables the environment-specific `syracuse_embeds` module. The referenced
+reusable block content and all component implementation code are not included
+in a configuration export.
 
 ## What the export proves
 
 The live site uses Drupal Canvas with the custom `syracuse_default` front-end theme and `gin` admin theme. The export contains:
 
-- 82 Canvas component definitions
+- 87 Canvas component definitions
 - 17 Canvas component folders
 - 6 reusable Canvas patterns
 - 2 JavaScript components
@@ -42,7 +44,7 @@ theme configuration.
 
 ## Important limitation
 
-The export is configuration, not a complete site build. All useful visual components depend on the custom `syracuse_default` theme, whose Single Directory Component Twig, CSS, JavaScript, and assets are absent. The local project is Drupal 10.6, while the archive also expects Drupal Canvas and a large contributed-module stack. A full config import is therefore neither reproducible nor safe.
+The export is configuration, not a complete site build. All useful visual components depend on the custom `syracuse_default` theme, whose Single Directory Component Twig, CSS, JavaScript, and assets are absent. The local project runs Drupal 11.3 and Canvas 1.8, but the archive still expects the production theme and a large contributed-module stack. A full config import is therefore neither reproducible nor safe.
 
 ## Local reconstruction
 
@@ -59,3 +61,19 @@ This is a visual/layout analogue, not a claim to reproduce Syracuse's proprietar
 The local `prototype_showcase` theme includes an IVMF Testimonial analogue
 whose inputs match the live Canvas component: quote, citation, program,
 program year, school, workplace, theme, image, link, and accessible link text.
+
+## July 17 local component sync
+
+The local theme adapts the portable parts of the July export without importing
+production UUIDs or dependencies:
+
+- Layout Container retains its existing local inputs and adds `full_dark`.
+- Text Content retains its existing local inputs and adds `dark_mode`.
+- CTA Bar, Deadlines, and Embed Widget are available as new local SDCs with
+  production-aligned input names.
+- Embed Widget escapes and displays `widget_code` instead of executing it. A
+  trusted embed renderer and allowlist must be designed before production use.
+
+Production folders, reusable block IDs, compiled Canvas assets, JavaScript
+components, and `syracuse_default` component records remain excluded. Those
+records are coupled to code and content entities that are absent locally.

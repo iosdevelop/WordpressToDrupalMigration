@@ -1,0 +1,12 @@
+<nav class="ps-cta-bar ps-canvas-section" aria-label="Related actions">
+  <ul class="ps-cta-bar-list">
+    {% for i in [1, 2, 3] %}
+      {% set link_text = attribute(_context, 'link_text_' ~ i) %}
+      {% set link_url = attribute(_context, 'link_url_' ~ i) %}
+      {% set accessible_link_text = attribute(_context, 'accessible_link_text_' ~ i) %}
+      {% if link_text and link_url %}
+        <li><a href="{{ link_url }}"{% if accessible_link_text %} aria-label="{{ accessible_link_text }}"{% endif %}>{{ link_text }}<span aria-hidden="true">&rarr;</span></a></li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</nav>

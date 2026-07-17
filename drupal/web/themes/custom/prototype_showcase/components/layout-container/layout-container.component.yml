@@ -16,6 +16,11 @@ props:
         2: Two
         3: Three
       examples: [3]
+    full_dark:
+      type: boolean
+      title: Full Dark
+      description: Render the full container with the dark visual treatment.
+      examples: [false]
 slots:
   content:
     title: Layout items

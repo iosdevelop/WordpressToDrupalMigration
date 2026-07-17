@@ -13,3 +13,8 @@ props:
       type: string
       title: Content
       examples: ['The local prototype mirrors the visual grammar exposed by the live Canvas export.']
+    dark_mode:
+      type: boolean
+      title: Dark Mode
+      description: Render this text block with the dark visual treatment.
+      examples: [false]
